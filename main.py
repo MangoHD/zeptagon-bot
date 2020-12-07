@@ -17,6 +17,7 @@ from boto.s3.connection import S3Connection
 from PIL import Image
 from io import BytesIO
 from discord.ext import commands
+
 getprefix = [os.environ['BOT_PREFIX'], os.environ['BOT_PREFIX2']]
 prefix = os.environ['BOT_PREFIX']
 motd = os.environ['BOT_MOTD']
@@ -26,6 +27,7 @@ ercolor = 0xff0000
 fieldfooter = "Links: [Support Server](https://discord.gg/89eu5WD)・[Invite Me](https://discord.com/oauth2/authorize?client_id=755010248929968158&permissions=8&scope=bot)"
 
 zept = commands.Bot(command_prefix=getprefix, case_insensitive=True)
+zept.remove_command('help')
 
 @zept.event
 async def on_ready():
