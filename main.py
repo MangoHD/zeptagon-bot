@@ -29,7 +29,7 @@ async def on_ready():
     print("[ LOGS ] :: Token found.")
     print("[ LOGS ] :: Bot started.")
     print(f"[ LOGS ] :: Current prefix is {prefix}")
-    print(f"[ LOGS ] :: Logged in as {dyv.user.name}#{dyv.user.discriminator}.")
+    print(f"[ LOGS ] :: Logged in as {zept.user.name}#{zept.user.discriminator}.")
 
 # -------------------- Rich Presence ---------------------- #
 
@@ -37,11 +37,11 @@ async def presence():
     await zept.wait_until_ready()
 
     while not dyv.is_closed():
-        await dyv.change_presence(status=discord.Status.online, activity=discord.Activity(type=discord.ActivityType.listening, name=f"{prefix}help | Dyv"))
+        await zept.change_presence(status=discord.Status.online, activity=discord.Activity(type=discord.ActivityType.listening, name=f"{prefix}help | Dyv"))
         await asyncio.sleep(7)
-        await dyv.change_presence(status=discord.Status.online, activity=discord.Activity(type=discord.ActivityType.watching, name=f"{len(dyv.guilds)} servers | Dyv"))
+        await zept.change_presence(status=discord.Status.online, activity=discord.Activity(type=discord.ActivityType.watching, name=f"{len(dyv.guilds)} servers | Dyv"))
         await asyncio.sleep(7)
-        await dyv.change_presence(status=discord.Status.online, activity=discord.Game(name=f'{motd} | Dyv'))
+        await zept.change_presence(status=discord.Status.online, activity=discord.Game(name=f'{motd} | Dyv'))
         await asyncio.sleep(7)
 
 zept.loop.create_task(presence())
