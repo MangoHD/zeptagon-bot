@@ -17,3 +17,7 @@ from boto.s3.connection import S3Connection
 from PIL import Image
 from io import BytesIO
 from discord.ext import commands
+
+
+prefix = ["Z/","z/"]
+client = commands.Bot(command_prefix=prefix, intents=intents, case_insensitive= True)
