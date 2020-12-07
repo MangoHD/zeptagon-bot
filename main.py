@@ -36,7 +36,7 @@ async def on_ready():
 async def presence():
     await zept.wait_until_ready()
 
-    while not dyv.is_closed():
+    while not zept.is_closed():
         await zept.change_presence(status=discord.Status.online, activity=discord.Activity(type=discord.ActivityType.listening, name=f"{prefix}help | Dyv"))
         await asyncio.sleep(7)
         await zept.change_presence(status=discord.Status.online, activity=discord.Activity(type=discord.ActivityType.watching, name=f"{len(dyv.guilds)} servers | Dyv"))
