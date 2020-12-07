@@ -1,0 +1,7 @@
+discord
+asyncio
+datetime
+pillow
+pyfiglet
+boto
+requests
