@@ -17,10 +17,15 @@ from boto.s3.connection import S3Connection
 from PIL import Image
 from io import BytesIO
 from discord.ext import commands
+getprefix = [os.environ['BOT_PREFIX'], os.environ['BOT_PREFIX2']]
+prefix = os.environ['BOT_PREFIX']
+motd = os.environ['BOT_MOTD']
+footer = os.environ['BOT_FOOTER']
+emcolor = 0x777777
+ercolor = 0xff0000
+fieldfooter = "Links: [Support Server](https://discord.gg/89eu5WD)・[Invite Me](https://discord.com/oauth2/authorize?client_id=755010248929968158&permissions=8&scope=bot)"
 
-
-prefix = ["Z/","z/"]
-zept = commands.Bot(command_prefix=prefix, intents=intents, case_insensitive= True)
+zept = commands.Bot(command_prefix=getprefix, case_insensitive=True)
 
 @zept.event
 async def on_ready():
@@ -73,9 +78,9 @@ async def purge(ctx, amount: int):
         title=f'Success',
         description=f"**{ctx.author.mention} I've has purged {amount} messages! <a:BlackVerifyCheck:774476123878457354>**",
         color=ctx.author.colour
-    
+
     )
-    
+
     embed.set_author(name=f"Purged",icon_url = f'{client.user.avatar_url}')
     embed.set_footer(text = f'Cycl-Bot Build V4.1')
     await ctx.send(embed=embed)
@@ -90,9 +95,9 @@ async def createchannel(ctx,*,channel):
         title=f'Success',
         description=f"**I've make the text channel, Channel name : {channel} <a:BlackVerifyCheck:774476123878457354>**",
         color=ctx.author.colour
-    
+
     )
-    
+
     embed.set_author(name=f"{ctx.author.name}",icon_url = f'{ctx.author.avatar_url}')
     embed.set_footer(text = f'Cycl-Bot Build V4.1')
     await ctx.send(embed=embed)
@@ -106,9 +111,9 @@ async def createvc(ctx,*,channel):
         title=f'Success',
         description=f"**I've make the voice channel, Channel name : {channel} <a:BlackVerifyCheck:774476123878457354>**",
         color=ctx.author.colour
-    
+
     )
-    
+
     embed.set_author(name=f"{ctx.author.name}",icon_url = f'{ctx.author.avatar_url}')
     embed.set_footer(text = f'Cycl-Bot Build V4.1')
     await ctx.send(embed=embed)
@@ -122,9 +127,9 @@ async def deletechannel(ctx,*,channel : discord.TextChannel):
         title=f'Success',
         description=f"**I've delete the voice channel, Channel name : {channel} <a:BlackVerifyCheck:774476123878457354>**",
         color=ctx.author.colour
-    
+
     )
-    
+
     embed.set_author(name=f"{ctx.author.name}",icon_url = f'{ctx.author.avatar_url}')
     embed.set_footer(text = f'Cycl-Bot Build V4.1')
     await ctx.send(embed=embed)
@@ -138,9 +143,9 @@ async def deletevoichannel(ctx,*,channel : discord.VoiceChannel):
         title=f'Success',
         description=f"**I've delete the coice channel, Channel name : {channel} <a:BlackVerifyCheck:774476123878457354>**",
         color=ctx.author.colour
-    
+
     )
-    
+
     embed.set_author(name=f"{ctx.author.name}",icon_url = f'{ctx.author.avatar_url}')
     embed.set_footer(text = f'Cycl-Bot Build V4.1')
     await ctx.send(embed=embed)
@@ -157,9 +162,9 @@ async def nuke(ctx,*,channel : discord.TextChannel = None):
         title=f'Success',
         description=f"**{ctx.author.mention}, Done nuke The channel! <a:BlackVerifyCheck:774476123878457354>**",
         color=ctx.author.colour
-    
+
     )
-    
+
     embed.set_author(name=f"Nuked",icon_url = ctx.author.avatar_url)
     embed.set_footer(text = f'Cycl-Bot Build V4.1')
     await channel.send(embed=embed)
@@ -175,26 +180,26 @@ async def kick(ctx,member : discord.Member,*,reason= None):
     emd = discord.Embed(
         description=f"**{ctx.author.mention}! <:OkNo:783666946573991987>**\n `No permissions to kick user. Try putting my role above the user's role`",
         color=ctx.author.colour
-    
+
     )
     emd.set_author(name=f"Error Unknown Failure :",icon_url = f'{ctx.author.avatar_url}')
     #kick Dm
     ems = discord.Embed(
         description=f"**You got kicked on {ctx.guild.name}!**\n\n**{ctx.author.name} Has kicked you <a:BlackVerifyCheck:774476123878457354>\n\n Reason = {reason}**",
         color=ctx.author.colour
-    
+
     )
-    
+
     ems.set_author(name=f"Kicked",icon_url = ctx.author.avatar_url)
     #Kick Message
     em = discord.Embed(
         description=f"**{ctx.author.mention} Has kicked member named : {member.name} <a:BlackVerifyCheck:774476123878457354>\n\n Reason = {reason}**",
         color=ctx.author.colour
-    
+
     )
-    
+
     em.set_author(name=f"Kicked",icon_url = ctx.author.avatar_url)
-    
+
     try:
         await member.kick(reason=reason)
         await ctx.channel.send(embed=em)
@@ -216,26 +221,26 @@ async def ban(ctx,member : discord.Member,*,reason= None):
     emd = discord.Embed(
         description=f"**{ctx.author.mention}! <:OkNo:783666946573991987>**\n `No permissions to ban user. Try putting my role above the user's role`",
         color=ctx.author.colour
-    
+
     )
     emd.set_author(name=f"Error Unknown Failure :",icon_url = f'{ctx.author.avatar_url}')
     #kick Dm
     ems = discord.Embed(
         description=f"**You got banned on {ctx.guild.name}!**\n\n**{ctx.author.name} Has banned you <a:BlackVerifyCheck:774476123878457354>\n\n Reason = {reason}**",
         color=ctx.author.colour
-    
+
     )
-    
+
     ems.set_author(name=f"Banned",icon_url = ctx.author.avatar_url)
     #Kick Message
     em = discord.Embed(
         description=f"**{ctx.author.mention} Has banned member named : {member.name} <a:BlackVerifyCheck:774476123878457354>\n\n Reason = {reason}**",
         color=ctx.author.colour
-    
+
     )
-    
+
     em.set_author(name=f"Banned",icon_url = ctx.author.avatar_url)
-    
+
     try:
         await member.ban(reason=reason)
         await ctx.channel.send(embed=em)
@@ -256,7 +261,7 @@ async def unban(ctx, *,member):
 
     for ban_entry in banned_users:
         user = ban_entry.user
-        
+
         if (user.name, user.discriminator) == (member_name, member_discriminator):
             await ctx.guild.unban(user)
             await ctx.send(f"{ctx.author.metion} Has Unbanned {user}!")
@@ -274,7 +279,7 @@ async def mute(ctx,member : discord.Member,*,reason = None):
     emd = discord.Embed(
         description=f"**{ctx.author.mention}! <:OkNo:783666946573991987>**\n `No permissions to mute user. Try giving me manage roles perms!`",
         color=ctx.author.colour
-    
+
     )
     emd.set_author(name=f"Error Unknown Failure :",icon_url = f'{client.user.avatar_url}')
     emd.set_footer(icon_url = "https://media.discordapp.net/attachments/739065668896292877/783989643196629002/cyclbot.png" , text = f'Cycl-Bot Build V4.1')
@@ -282,18 +287,18 @@ async def mute(ctx,member : discord.Member,*,reason = None):
     ems = discord.Embed(
         description=f"**You got muted on {ctx.guild.name}!**\n**{ctx.author.name} Has muted you <a:BlackVerifyCheck:774476123878457354>\n\n Reason = {reason}**",
         color=ctx.author.colour
-    
+
     )
-    
+
     ems.set_author(name=f"Muted",icon_url = "https://media.discordapp.net/attachments/739065668896292877/783989643196629002/cyclbot.png")
     ems.set_footer(icon_url = "https://media.discordapp.net/attachments/739065668896292877/783989643196629002/cyclbot.png" , text = f'Cycl-Bot Build V4.1')
     #Kick Message
     em = discord.Embed(
         description=f"**{ctx.author.mention} Has muted member named : {member.name} <a:BlackVerifyCheck:774476123878457354>\n\n Reason = {reason}**",
         color=ctx.author.colour
-    
+
     )
-    
+
     em.set_author(name=f"Muted",icon_url = "https://media.discordapp.net/attachments/739065668896292877/783989643196629002/cyclbot.png")
     em.set_footer(icon_url = "https://media.discordapp.net/attachments/739065668896292877/783989643196629002/cyclbot.png" , text = f'Cycl-Bot Build V4.1')
     mutessd = ['Muted','muted']
@@ -320,7 +325,7 @@ async def unmute(ctx,member : discord.Member,*,reason= None):
     emd = discord.Embed(
         description=f"**{ctx.author.mention}! <:OkNo:783666946573991987>*\n `No permissions to unmute user. Try giving me manage roles perms!`",
         color=ctx.author.colour
-    
+
     )
     emd.set_author(name=f"Error Unknown Failure :",icon_url = f'{client.user.avatar_url}')
     emd.set_footer(text = f'Cycl-Bot Build V4.1')
@@ -328,21 +333,21 @@ async def unmute(ctx,member : discord.Member,*,reason= None):
     ems = discord.Embed(
         description=f"**You got unmuted on {ctx.guild.name}!**\n**{ctx.author.name} Has unmuted you <a:BlackVerifyCheck:774476123878457354>\n\n Reason = {reason}**",
         color=ctx.author.colour
-    
+
     )
-    
+
     ems.set_author(name=f"Unmuted",icon_url = ctx.author.avatar_url)
     ems.set_footer(text = f'Cycl-Bot Build V4.1')
     #Kick Message
     em = discord.Embed(
         description=f"**{ctx.author.mention} Has unmuted member named : {member.name} <a:BlackVerifyCheck:774476123878457354>\n\n Reason = {reason}**",
         color=ctx.author.colour
-    
+
     )
-    
+
     em.set_author(name=f"Unmuted",icon_url = ctx.author.avatar_url)
     em.set_footer(text = f'Cycl-Bot Build V4.1')
-    
+
     try:
         await member.remove_roles(role)
         await ctx.channel.send(embed=em)
@@ -352,5 +357,5 @@ async def unmute(ctx,member : discord.Member,*,reason= None):
             await ctx.send(f"**{member.name}#{member.discriminator}** has their **DM**s closed.")
     except:
         await ctx.send(embed=emd)
-        
+
 zept.run(os.environ['TOKEN'])
