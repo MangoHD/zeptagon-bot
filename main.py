@@ -57,4 +57,6 @@ def setup(bot):
         for cog in exts:
             bot.load_extension(f"cogs.{cog}")
 
+setup(zept)
+
 zept.run(os.environ['TOKEN'])
