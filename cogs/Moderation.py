@@ -113,7 +113,7 @@ class Moderation(commands.Cog):
         try:
             try:
                 #e = await member.send(embed=kickdm)
-                e = await ctx.send(f"You have been kicked from **{ctx.guild.name}**.\n\nResponsible Moderator: **{ctx.author}**")
+                e = await member.send(f"You have been kicked from **{ctx.guild.name}**.\n\nResponsible Moderator: **{ctx.author}**")
             except:
                 pass
             await member.kick(reason=reason)
@@ -166,7 +166,7 @@ class Moderation(commands.Cog):
         try:
             try:
                 #e = await member.send(embed=bandm)
-                e = await ctx.send(f"You have been banned from **{ctx.guild.name}**.\n\nResponsible Moderator: **{ctx.author}**")
+                e = await member.send(f"You have been banned from **{ctx.guild.name}**.\n\nResponsible Moderator: **{ctx.author}**")
             except:
                 pass
             await member.ban(reason=reason)
@@ -179,7 +179,6 @@ class Moderation(commands.Cog):
 
     @commands.command()
     @commands.has_permissions(ban_members = True)
-    @commands.bot_has_guild_permissions(ban_members = True)
     async def unban(self, ctx, *, member):
         try:
             int(member)
@@ -206,96 +205,31 @@ class Moderation(commands.Cog):
                     except Exception as e:
                         await ctx.send(f"```{e}```")
 
-    #MUTE COMMAND
+
     @commands.command()
-    @commands.cooldown(1, 2, commands.BucketType.user)
-    @commands.has_permissions(administrator=True)
-    @commands.bot_has_guild_permissions(administrator=True)
-    async def mute(self, ctx,member : discord.Member,*,reason = None):
-        if reason == None:
-            reason = "No Reason Provided"
+    @commands.has_permissions(manage_members=True)
+    async def mute(self, ctx, member : discord.Member, *, reason = "No Reason Provided"):
 
-        emd = discord.Embed(
-            description=f"**{ctx.author.mention}! <:OkNo:783666946573991987>**\n `No permissions to mute user. Try giving me manage roles perms!`",
-            color=ctx.author.colour
+        for role in ctx.guild.roles:
+            if 'muted' or 'Muted' in role.name:
+                global muterole
+                muterole = role
 
-        )
-        emd.set_author(name=f"Error Unknown Failure :",icon_url = f'{client.user.avatar_url}')
-        emd.set_footer(icon_url = "https://media.discordapp.net/attachments/739065668896292877/783989643196629002/cyclbot.png" , text = f'Cycl-Bot Build V4.1')
-        #kick Dm
-        ems = discord.Embed(
-            description=f"**You got muted on {ctx.guild.name}!**\n**{ctx.author.name} Has muted you <a:BlackVerifyCheck:774476123878457354>\n\n Reason = {reason}**",
-            color=ctx.author.colour
-
-        )
-
-        ems.set_author(name=f"Muted",icon_url = "https://media.discordapp.net/attachments/739065668896292877/783989643196629002/cyclbot.png")
-        ems.set_footer(icon_url = "https://media.discordapp.net/attachments/739065668896292877/783989643196629002/cyclbot.png" , text = f'Cycl-Bot Build V4.1')
-        #Kick Message
-        em = discord.Embed(
-            description=f"**{ctx.author.mention} Has muted member named : {member.name} <a:BlackVerifyCheck:774476123878457354>\n\n Reason = {reason}**",
-            color=ctx.author.colour
-
-        )
-
-        em.set_author(name=f"Muted",icon_url = "https://media.discordapp.net/attachments/739065668896292877/783989643196629002/cyclbot.png")
-        em.set_footer(icon_url = "https://media.discordapp.net/attachments/739065668896292877/783989643196629002/cyclbot.png" , text = f'Cycl-Bot Build V4.1')
-        mutessd = ['Muted','muted']
         try:
-            role = discord.utils.get(self, ctx.guild.roles, name=f'{mutessd}')
-            await member.add_roles(role)
-            await ctx.channel.send(embed=em)
-            try:
-                await member.send(embed=ems)
-            except:
-                await ctx.send(f"**{member.name}#{member.discriminator}** has their **DM**s closed.")
-        except:
-            await ctx.send(embed=emd)
-    #UNMUTE COMMANDS
+            await member.add_roles(muterole)
+            await ctx.channel.send(f"I have muted **{member}**.\n\nResponsible Moderator: **{ctx.author}**")
+        except Exception as e:
+            await ctx.send(f"```{e}```")
+
     @commands.command()
-    @commands.cooldown(1, 2, commands.BucketType.user)
-    @commands.has_permissions(administrator=True)
-    @commands.bot_has_guild_permissions(administrator=True)
+    @commands.has_permissions(manage_members=True)
     async def unmute(self, c,member : discord.Member,*,reason= None):
-        mutessd = ['Muted','muted']
-        if reason == None:
-            reason = "No Reason Provided"
-        role = discord.utils.get(ctx.guild.roles, name=mutessd)
-        emd = discord.Embed(
-            description=f"**{ctx.author.mention}! <:OkNo:783666946573991987>*\n `No permissions to unmute user. Try giving me manage roles perms!`",
-            color=ctx.author.colour
-
-        )
-        emd.set_author(name=f"Error Unknown Failure :",icon_url = f'{client.user.avatar_url}')
-        emd.set_footer(text = f'Cycl-Bot Build V4.1')
-        #kick Dm
-        ems = discord.Embed(
-            description=f"**You got unmuted on {ctx.guild.name}!**\n**{ctx.author.name} Has unmuted you <a:BlackVerifyCheck:774476123878457354>\n\n Reason = {reason}**",
-            color=ctx.author.colour
-
-        )
-
-        ems.set_author(name=f"Unmuted",icon_url = ctx.author.avatar_url)
-        ems.set_footer(text = f'Cycl-Bot Build V4.1')
-        #Kick Message
-        em = discord.Embed(
-            description=f"**{ctx.author.mention} Has unmuted member named : {member.name} <a:BlackVerifyCheck:774476123878457354>\n\n Reason = {reason}**",
-            color=ctx.author.colour
-
-        )
-
-        em.set_author(name=f"Unmuted",icon_url = ctx.author.avatar_url)
-        em.set_footer(text = f'Cycl-Bot Build V4.1')
 
         try:
-            await member.remove_roles(role)
-            await ctx.channel.send(embed=em)
-            try:
-                await member.send(embed=ems)
-            except:
-                await ctx.send(f"**{member.name}#{member.discriminator}** has their **DM**s closed.")
-        except:
-            await ctx.send(embed=emd)
+            await member.remove_roles(muterole)
+            await ctx.channel.send(f"I have unmuted **{member}**.\n\nResponsible Moderator: **{ctx.author}**")
+        except Exception as e:
+            await ctx.send(f"```{e}```")
 
 def setup(bot):
     bot.add_cog(Moderation(bot))
