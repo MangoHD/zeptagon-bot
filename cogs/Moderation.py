@@ -207,10 +207,9 @@ class Moderation(commands.Cog):
 
         rolenames = ['muted', 'Muted', 'mute', 'Mute', 'silenced', 'Silenced']
 
-        muterole = discord.utils.get(ctx.guild.roles, name=rolenames)
-
         try:
-            await member.add_roles(muterole)
+            role = discord.utils.get(ctx.guild.roles, name=f'{rolenames}')
+            await member.add_roles(role)
             await ctx.channel.send(f"I have muted **{member}**.\n\nResponsible Moderator: **{ctx.author}**")
         except Exception as e:
             await ctx.send(f"```{e}```")
