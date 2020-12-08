@@ -112,13 +112,16 @@ class Moderation(commands.Cog):
 
         try:
             try:
-                e = await member.send(embed=kickdm)
+                #e = await member.send(embed=kickdm)
+                e = await ctx.send(f"You have been kicked from **{ctx.guild.name}**.\n\nResponsible Moderator: **{ctx.author}**")
             except:
                 pass
             await member.kick(reason=reason)
-            await ctx.channel.send(embed=kickmessage)
-        except:
-            await ctx.send(embed=nokickperms)
+            #await ctx.channel.send(embed=kickmessage)
+            await ctx.send(f"I have kicked **{ctx.author}**.\n\nResponsible Moderator: **{ctx.author}**")
+        except Exception as e:
+            #await ctx.send(embed=nokickperms)
+            await ctx.send("```{}```".format(e))
             await e.delete()
 
     @commands.command()
@@ -162,29 +165,46 @@ class Moderation(commands.Cog):
         nobanperms.set_footer(text=footer)
         try:
             try:
-                e = await member.send(embed=bandm)
+                #e = await member.send(embed=bandm)
+                e = await ctx.send(f"You have been banned from **{ctx.guild.name}**.\n\nResponsible Moderator: **{ctx.author}**")
             except:
                 pass
             await member.ban(reason=reason)
-            await ctx.channel.send(embed=banmessage)
+            #await ctx.channel.send(embed=banmessage)
+            await ctx.send(f"I have banned **{ctx.author}**.\n\nResponsible Moderator: **{ctx.author}**")
         except:
-            await ctx.send(embed=nobanperms)
+            #await ctx.send(embed=nobanperms)
+            await ctx.send("```{}```".format(e))
             await e.delete()
 
     @commands.command()
     @commands.has_permissions(ban_members = True)
     @commands.bot_has_guild_permissions(ban_members = True)
     async def unban(self, ctx, *, member):
-        banned_users = await ctx.guild.bans()
-        member_name, member_discriminator = member.split('#')
-
-        for ban_entry in banned_users:
-            user = ban_entry.user
-
-            if (user.name, user.discriminator) == (member_name, member_discriminator):
+        try:
+            int(member)
+            member = discord.Member
+            banned_users = await ctx.guild.bans()
+            try:
                 await ctx.guild.unban(user)
                 await ctx.send(f"{ctx.author.mention}, I have unbanned **{user}**.")
                 return
+            except Exception as e:
+                await ctx.send(f"```{e}```")
+        except:
+            banned_users = await ctx.guild.bans()
+            member_name, member_discriminator = member.split('#')
+
+            for ban_entry in banned_users:
+                user = ban_entry.user
+
+                if (user.name, user.discriminator) == (member_name, member_discriminator):
+                    try:
+                        await ctx.guild.unban(user)
+                        await ctx.send(f"{ctx.author.mention}, I have unbanned **{user}**.")
+                        return
+                    except Exception as e:
+                        await ctx.send(f"```{e}```")
 
     #MUTE COMMAND
     @commands.command()

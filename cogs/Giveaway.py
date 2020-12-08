@@ -11,7 +11,7 @@ motd = os.environ['BOT_MOTD']
 footer = os.environ['BOT_FOOTER']
 emcolor = 0x777777
 ercolor = 0xff0000
-fieldfooter = "Links: [Support Server](https://discord.gg/89eu5WD)・[Invite Me](https://discord.com/oauth2/authorize?client_id=755010248929968158&permissions=8&scope=bot)"
+fieldfooter = "Links: [Support Server](https://discord.gg/89eu5WD)・[Invite Me](https://discord.com/oauth2/authorize?client_id=785496485659148359&permissions=8&scope=bot)"
 
 class GiveawayCommands(commands.Cog):
     def __init__(self, bot):
@@ -35,8 +35,8 @@ class GiveawayCommands(commands.Cog):
             await ctx.message.delete()
             #await a1.delete()
             await ctx.channel.send(embed=discord.Embed(
-                title='Error', 
-                description=f'You did not answered fast enough. Try again by typing `{prefix}gstart`', 
+                title='Error',
+                description=f'You did not answered fast enough. Try again by typing `{prefix}gstart`',
                 color=emcolor
             ))
             return
@@ -54,8 +54,8 @@ class GiveawayCommands(commands.Cog):
         except asyncio.TimeoutError:
             #await a2.delete()
             await ctx.channel.send(embed=discord.Embed(
-                title='Error', 
-                description=f'You did not answered fast enough. Try again by typing `{prefix}gstart`', 
+                title='Error',
+                description=f'You did not answered fast enough. Try again by typing `{prefix}gstart`',
                 color=emcolor
             ))
             return
@@ -72,8 +72,8 @@ class GiveawayCommands(commands.Cog):
         except asyncio.TimeoutError:
             #await a3.delete()
             await ctx.channel.send(embed=discord.Embed(
-                title='Error', 
-                description=f'You did not answered fast enough. Try again by typing `{prefix}gstart`', 
+                title='Error',
+                description=f'You did not answered fast enough. Try again by typing `{prefix}gstart`',
                 color=emcolor
             ))
             return
@@ -96,8 +96,8 @@ class GiveawayCommands(commands.Cog):
         except asyncio.TimeoutError:
             #await a4.delete()
             await ctx.channel.send(embed=discord.Embed(
-                title='Error', 
-                description=f'You did not answered fast enough. Try again by typing `{prefix}gstart`', 
+                title='Error',
+                description=f'You did not answered fast enough. Try again by typing `{prefix}gstart`',
                 color=emcolor
             ))
             return
