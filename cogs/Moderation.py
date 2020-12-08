@@ -198,7 +198,7 @@ class Moderation(commands.Cog):
                         await ctx.send(f"```{e}```")
 
 
-    @commands.command()
+    @commands.command(pass_context = True)
     @commands.has_permissions(mute_members=True)
     async def mute(self, ctx, member : discord.Member, *, reason = "No Reason Provided"):
 
@@ -212,7 +212,7 @@ class Moderation(commands.Cog):
                 except Exception as e:
                     await ctx.send(f"```{e}```")
 
-    @commands.command()
+    @commands.command(pass_context = True)
     @commands.has_permissions(mute_members=True)
     async def unmute(self, member : discord.Member, *, reason = "No Reason Provided"):
 
