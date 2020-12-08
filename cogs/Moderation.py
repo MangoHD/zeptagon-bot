@@ -207,7 +207,7 @@ class Moderation(commands.Cog):
 
 
     @commands.command()
-    @commands.has_permissions(manage_members=True)
+    @commands.has_permissions(mute_members=True)
     async def mute(self, ctx, member : discord.Member, *, reason = "No Reason Provided"):
 
         for role in ctx.guild.roles:
@@ -222,7 +222,7 @@ class Moderation(commands.Cog):
             await ctx.send(f"```{e}```")
 
     @commands.command()
-    @commands.has_permissions(manage_members=True)
+    @commands.has_permissions(mute_members=True)
     async def unmute(self, c,member : discord.Member,*,reason= None):
 
         try:
