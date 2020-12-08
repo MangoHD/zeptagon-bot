@@ -23,15 +23,8 @@ class Moderation(commands.Cog):
             channel = ctx.channel
         try:
             await channel.edit(slowmode_delay=seconds)
-            emb=discord.Embed(description=f'Successfully changed slowmode to `{seconds}` seconds.', color=emcolor)
-            emb.set_footer(text=footer)
-            emb.add_field(name="_ _", value=fieldfooter)
-            emb.set_author(name='Success', icon_url=ctx.author.avatar_url)
             await ctx.send(f'Successfully changed slowmode to `{seconds}` seconds.')
         except Exception as e:
-            emb=discord.Embed(title='Error', description='Bot has missing permissions to do this.', color=emcolor)
-            emb.set_footer(text=footer)
-            emb.add_field(name="_ _", value=fieldfooter)
             await ctx.send(f"```{e}```")
 
     @commands.command(pass_context=True)
@@ -181,12 +174,11 @@ class Moderation(commands.Cog):
     @commands.has_permissions(ban_members = True)
     async def unban(self, ctx, *, member):
         try:
-            int(member)
-            member = discord.Member
-            banned_users = await ctx.guild.bans()
+            userid = int(member)
+            user = await discord.utils.get(discord.Member, id=userid)
             try:
                 await ctx.guild.unban(user)
-                await ctx.send(f"{ctx.author.mention}, I have unbanned **{user}**.")
+                await ctx.send(f"{ctx.author.mention}, I have unbanned **{user}**.\n\nResponsible Moderator: **{ctx.author}**")
                 return
             except Exception as e:
                 await ctx.send(f"```{e}```")
