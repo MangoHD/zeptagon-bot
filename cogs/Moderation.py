@@ -200,7 +200,7 @@ class Moderation(commands.Cog):
 
     @commands.command(pass_context = True)
     @commands.has_permissions(mute_members=True)
-    async def mute(self, ctx, member : discord.Member, *, reason = "No Reason Provided"):
+    async def mute(self, ctx, member: discord.Member):
 
         for role in ctx.guild.roles:
             if 'muted' or 'Muted' in role.name:
@@ -214,7 +214,7 @@ class Moderation(commands.Cog):
 
     @commands.command(pass_context = True)
     @commands.has_permissions(mute_members=True)
-    async def unmute(self, member : discord.Member, *, reason = "No Reason Provided"):
+    async def unmute(self, member: discord.Member):
 
         try:
             await member.remove_roles(muterole)

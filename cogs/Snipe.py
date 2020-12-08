@@ -22,7 +22,7 @@ class Snipe(commands.Cog):
     snipe_message_id = None
 
     @commands.Cog.listener()
-    async def on_message_delete(message):
+    async def on_message_delete(self, message):
 
         global snipe_message_content
         global snipe_message_author
