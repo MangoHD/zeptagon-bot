@@ -202,7 +202,7 @@ class Moderation(commands.Cog):
 
 
     @commands.command(pass_context = True)
-    @commands.has_permissions(mute_members=True)
+    @commands.has_permissions()
     async def mute(self, ctx, member: discord.Member):
 
         rolenames = ['muted', 'Muted', 'mute', 'Mute', 'silenced', 'Silenced']
