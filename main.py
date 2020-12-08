@@ -50,7 +50,7 @@ async def presence():
 zept.loop.create_task(presence())
 
 def setup(bot):
-    exts = ['ErrorHandler', 'Moderation', 'Giveaway']
+    exts = ['ErrorHandler', 'Moderation', 'Giveaway', 'Snipe']
 
     if __name__ == "__main__":
         for cog in exts:
