@@ -9,7 +9,7 @@ motd = os.environ['BOT_MOTD']
 footer = os.environ['BOT_FOOTER']
 emcolor = 0x777777
 ercolor = 0xff0000
-fieldfooter = "Links: [Support Server](https://discord.gg/89eu5WD)・[Invite Me](https://discord.com/oauth2/authorize?client_id=755010248929968158&permissions=8&scope=bot)"
+fieldfooter = "Links: [Support Server](https://discord.gg/89eu5WD)・[Invite Me](https://discord.com/oauth2/authorize?client_id=785496485659148359&permissions=8&scope=bot)"
 
 class ErrorHandler(commands.Cog):
     def __init__(self, bot):

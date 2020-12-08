@@ -13,7 +13,6 @@ import requests
 import re
 import base64
 import dyv_math as mfmath
-from boto.s3.connection import S3Connection
 from PIL import Image
 from io import BytesIO
 from discord.ext import commands
@@ -24,7 +23,7 @@ motd = os.environ['BOT_MOTD']
 footer = os.environ['BOT_FOOTER']
 emcolor = 0x777777
 ercolor = 0xff0000
-fieldfooter = "Links: [Support Server](https://discord.gg/89eu5WD)・[Invite Me](https://discord.com/oauth2/authorize?client_id=755010248929968158&permissions=8&scope=bot)"
+fieldfooter = "Links: [Support Server](https://discord.gg/89eu5WD)・[Invite Me](https://discord.com/oauth2/authorize?client_id=785496485659148359&permissions=8&scope=bot)"
 
 zept = commands.Bot(command_prefix=getprefix, case_insensitive=True)
 zept.remove_command('help')

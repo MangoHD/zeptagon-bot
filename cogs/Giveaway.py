@@ -42,45 +42,32 @@ class GiveawayCommands(commands.Cog):
             return
         else:
             answers.append(msg.content)
-        await ctx.message.delete()
-        #await a1.delete()
-        #await ctx.channel.purge(limit=1)
         await ctx.channel.send(embed=discord.Embed(
             description=f'Please enter the time for the giveaway before it rolls. (for example: `15s 2m 3h 4d`)',
-            color=emcolor
-        ))
+            color=emcolor))
         try:
             msg = await self.bot.wait_for('message', timeout=45.0, check=check)
         except asyncio.TimeoutError:
-            #await a2.delete()
             await ctx.channel.send(embed=discord.Embed(
                 title='Error',
                 description=f'You did not answered fast enough. Try again by typing `{prefix}gstart`',
-                color=emcolor
-            ))
+                color=emcolor))
             return
         else:
             answers.append(msg.content)
-        #await a2.delete()
-        #await ctx.channel.purge(limit=1)
         await ctx.channel.send(embed=discord.Embed(
             description=f'Please enter the prize for the giveaway.',
-            color=emcolor
-        ))
+            color=emcolor))
         try:
             msg = await self.bot.wait_for('message', timeout=45.0, check=check)
         except asyncio.TimeoutError:
-            #await a3.delete()
             await ctx.channel.send(embed=discord.Embed(
                 title='Error',
                 description=f'You did not answered fast enough. Try again by typing `{prefix}gstart`',
-                color=emcolor
-            ))
+                color=emcolor))
             return
         else:
             answers.append(msg.content)
-        #await a3.delete()
-        #await ctx.channel.purge(limit=1)
         def check2(message):
             try:
                 int(message.content)
@@ -89,17 +76,14 @@ class GiveawayCommands(commands.Cog):
                 return False
         await ctx.channel.send(embed=discord.Embed(
             description=f'Please how much winners needed for this giveaway. (max: 25)',
-            color=emcolor
-        ))
+            color=emcolor))
         try:
             msg = await self.bot.wait_for('message', timeout=45.0, check=check2)
         except asyncio.TimeoutError:
-            #await a4.delete()
             await ctx.channel.send(embed=discord.Embed(
                 title='Error',
                 description=f'You did not answered fast enough. Try again by typing `{prefix}gstart`',
-                color=emcolor
-            ))
+                color=emcolor))
             return
         else:
             answers.append(msg.content)
@@ -130,8 +114,6 @@ class GiveawayCommands(commands.Cog):
             await ctx.channel.send(
                 f"**Error:** You didn't enter the time properly. Please enter an integer (numbers) next time. You can  try again by typing `{prefix}giveaway`")
             return
-        #await a4.delete()
-        #await ctx.channel.purge(limit=1)
         end = datetime.datetime.utcnow() + datetime.timedelta(seconds=time)
         prize = answers[2]
         if int(answers[3]) < 25:
@@ -141,8 +123,7 @@ class GiveawayCommands(commands.Cog):
         embed = discord.Embed(
             description=f"Host: {ctx.author.mention}\nWinners: {answers[3]}\nTime Remaining: {answers[1]}\n\nReact to 🎉 to enter the giveaway!",
             colour=discord.Color.blue(),
-            timestamp=end
-        )
+            timestamp=end)
         embed.set_author(name=prize, icon_url="https://cdn.discordapp.com/attachments/743425064921464833/767981650070994984/86c9a4dde5bb348b53f2fb7ff099e9d5-square-wrapped-gift-box-by-vexels.png")
         embed.set_footer(text=f"Ends at")
         embed.add_field(name="_ _", value=fieldfooter)
@@ -158,11 +139,9 @@ class GiveawayCommands(commands.Cog):
             i = i
             winners.append(random.choice(users).mention)
         embed2 = discord.Embed(
-            # title=f'<:CH_present:767981864132018176> {prize}',
             description=f"Host: {ctx.author.mention}\nValid Entries: {len(users)}\nWinners: \n"+'\n'.join(winners)+"\n",
             colour=emcolor,
-            timestamp=end
-        )
+            timestamp=end)
         embed2.set_author(name=prize, icon_url="https://cdn.discordapp.com/attachments/743425064921464833/767981650070994984/86c9a4dde5bb348b53f2fb7ff099e9d5-square-wrapped-gift-box-by-vexels.png")
         embed2.add_field(name="_ _", value=fieldfooter)
         embed2.set_footer(text="Ended at")
@@ -183,8 +162,7 @@ class GiveawayCommands(commands.Cog):
         winner = random.choice(users)
         emb = discord.Embed(
             description=f"Successfully re-rolled giveaway in {channel.mention}",
-            color=discord.Color.green()
-        )
+            color=discord.Color.green())
         await ctx.send(embed=emb)
         await channel.send(f"🎊 **Congratulations** {winner.mention}! You are the new winner!")
 
@@ -202,8 +180,7 @@ class GiveawayCommands(commands.Cog):
         winner = random.choice(users)
         emb = discord.Embed(
             description=f"Successfully ended giveaway in {channel.mention}",
-            color=discord.Color.green()
-        )
+            color=discord.Color.green())
         await ctx.send(embed=emb)
         await channel.send(f"🎊 **Congratulations** {winner.mention}! You have won the giveaway!")
 

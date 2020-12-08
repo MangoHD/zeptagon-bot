@@ -9,7 +9,7 @@ motd = os.environ['BOT_MOTD']
 footer = os.environ['BOT_FOOTER']
 emcolor = 0x777777
 ercolor = 0xff0000
-fieldfooter = "Links: [Support Server](https://discord.gg/89eu5WD)・[Invite Me](https://discord.com/oauth2/authorize?client_id=755010248929968158&permissions=8&scope=bot)"
+fieldfooter = "Links: [Support Server](https://discord.gg/89eu5WD)・[Invite Me](https://discord.com/oauth2/authorize?client_id=785496485659148359&permissions=8&scope=bot)"
 
 class Moderation(commands.Cog):
     def __init__(self, bot):
@@ -206,16 +206,15 @@ class Moderation(commands.Cog):
             if 'muted' or 'Muted' in role.name:
                 global muterole
                 muterole = role
-
-        try:
-            await member.add_roles(muterole)
-            await ctx.channel.send(f"I have muted **{member}**.\n\nResponsible Moderator: **{ctx.author}**")
-        except Exception as e:
-            await ctx.send(f"```{e}```")
+                try:
+                    await member.add_roles(muterole)
+                    await ctx.channel.send(f"I have muted **{member}**.\n\nResponsible Moderator: **{ctx.author}**")
+                except Exception as e:
+                    await ctx.send(f"```{e}```")
 
     @commands.command()
     @commands.has_permissions(mute_members=True)
-    async def unmute(self, c,member : discord.Member,*,reason= None):
+    async def unmute(self, member : discord.Member, *, reason = "No Reason Provided"):
 
         try:
             await member.remove_roles(muterole)
