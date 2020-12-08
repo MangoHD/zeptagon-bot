@@ -201,7 +201,6 @@ class Moderation(commands.Cog):
                         await ctx.send(f"```{e}```")
 
     @commands.command()
-    @commands.has_permissions(mute_members=True)
     async def mute(self, ctx, member: discord.Member):
 
         mutessd = ['muted', 'Muted', 'mute', 'Mute', 'silenced', 'Silenced']
