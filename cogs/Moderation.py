@@ -28,6 +28,7 @@ class Moderation(commands.Cog):
             await ctx.send(f"```{e}```")
 
     @commands.command(pass_context=True)
+    @commands.guild_only()
     @commands.has_permissions(manage_roles = True)
     async def giverole(self, ctx, user: discord.Member, role: discord.Role):
         try:
@@ -37,11 +38,12 @@ class Moderation(commands.Cog):
             await ctx.send(f'```{e}```')
 
     @commands.command(aliases=['clear'])
+    @commands.guild_only()
     @commands.has_permissions(manage_messages = True)
     async def purge(self, ctx, amount: int):
         try:
             if amount < 500:
-                await ctx.channel.purge(limit=amount)
+                await ctx.channel.purge(limit=amount+1)
                 await ctx.send("Deleted {} messages.".format(amount))
             else:
                 await ctx.send("Unable to delete messages. Maximum is **500** messages.")
@@ -171,6 +173,7 @@ class Moderation(commands.Cog):
             await e.delete()
 
     @commands.command()
+    @commands.guild_only()
     @commands.has_permissions(ban_members = True)
     async def unban(self, ctx, *, member):
         try:
@@ -202,19 +205,19 @@ class Moderation(commands.Cog):
     @commands.has_permissions(mute_members=True)
     async def mute(self, ctx, member: discord.Member):
 
-        for role in ctx.guild.roles:
-            if 'muted' or 'Muted' in role.name:
-                global muterole
-                muterole = role
-                try:
-                    await member.add_roles(muterole)
-                    await ctx.channel.send(f"I have muted **{member}**.\n\nResponsible Moderator: **{ctx.author}**")
-                except Exception as e:
-                    await ctx.send(f"```{e}```")
+        rolenames = ['muted', 'Muted', 'mute', 'Mute', 'silenced', 'Silenced']
+
+        muterole = discord.utils.get(ctx.guild.roles, name=rolenames)
+
+        try:
+            await member.add_roles(muterole)
+            await ctx.channel.send(f"I have muted **{member}**.\n\nResponsible Moderator: **{ctx.author}**")
+        except Exception as e:
+            await ctx.send(f"```{e}```")
 
     @commands.command(pass_context = True)
     @commands.has_permissions(mute_members=True)
-    async def unmute(self, member: discord.Member):
+    async def unmute(self, ctx, member: discord.Member):
 
         try:
             await member.remove_roles(muterole)

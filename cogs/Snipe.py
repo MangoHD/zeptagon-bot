@@ -31,7 +31,7 @@ class Snipe(commands.Cog):
         snipe_message_content = message.content
         snipe_message_author = message.author
         snipe_message_id = message.id
-        await asyncio.sleep(120)
+        await asyncio.sleep(75)
 
         if message.id == snipe_message_id:
             snipe_message_author = None
@@ -41,13 +41,24 @@ class Snipe(commands.Cog):
     @commands.command()
     @commands.guild_only()
     async def snipe(self, ctx):
-        emb = discord.Embed(
-            description = snipe_message_content,
-            color=emcolor
-        )
-        emb.set_author(name=snipe_message_author, icon_url=snipe_message_author.avatar_url)
-        emb.add_field(name="_ _", value=fieldfooter)
-        await ctx.send(embed=emb)
+        if snipe_message_content != None:
+            emb = discord.Embed(
+                description = snipe_message_content,
+                color=emcolor
+            )
+            emb.set_author(name=snipe_message_author, icon_url=snipe_message_author.avatar_url)
+            emb.add_field(name="_ _", value=fieldfooter)
+            await ctx.send(embed=emb)
+        else:
+            await ctx.send("There's nothing to snipe.")
+
+        global snipe_message_content
+        global snipe_message_author
+        global snipe_message_id
+
+        snipe_message_content = None
+        snipe_message_author = None
+        snipe_message_id = None
 
 def setup(bot):
     bot.add_cog(Snipe(bot))
