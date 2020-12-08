@@ -52,10 +52,6 @@ class Snipe(commands.Cog):
         else:
             await ctx.send("There's nothing to snipe.")
 
-        global snipe_message_content
-        global snipe_message_author
-        global snipe_message_id
-
         snipe_message_content = None
         snipe_message_author = None
         snipe_message_id = None
