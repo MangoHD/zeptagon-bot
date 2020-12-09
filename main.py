@@ -69,7 +69,7 @@ async def mute(ctx, member: discord.Member):
     mutessd = ['muted', 'Muted', 'mute', 'Mute', 'Silenced', 'silenced']
     try:
         role = discord.utils.get(member.guild.roles, name='Muted')
-        await ctx.add_roles(member, role)
+        await member.add_roles(role)
         await ctx.send(f"I have muted **{member.name}**.\n\nResponsible Moderator: **{ctx.author}**")
     except Exception as e:
         await ctx.send(f"```{e}```")
