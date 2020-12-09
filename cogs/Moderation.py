@@ -209,9 +209,17 @@ class Moderation(commands.Cog):
     async def mute(self, ctx, member: discord.Member):
         mutessd = ['muted', 'Muted', 'mute', 'Mute', 'Silenced', 'silenced']
         try:
-            role = discord.utils.get(member.guild.roles, name=mutessd)
-            await member.add_roles(role)
-            await ctx.send(f"I have muted **{member.name}**.\n\nResponsible Moderator: **{ctx.author}**")
+            try:
+                await member.add_roles(discord.utils.get(member.guild.roles, name='muted'))
+            except:
+                try:
+                    await member.add_roles(discord.utils.get(member.guild.roles, name='mute'))
+                except:
+                    try:
+                        await member.add_roles(discord.utils.get(member.guild.roles, name='silenced'))
+                    except:
+                        await ctx.send(f"I can't find the `muterole`. You can either make a role named `Muted` or use the `{prefix}setup` command.")
+            await ctx.send(f"I have muted **{member.name}**.\nResponsible Moderator: **{ctx.author}**")
         except Exception as e:
             await ctx.send(f"```{e}```")
 
@@ -221,9 +229,18 @@ class Moderation(commands.Cog):
     async def unmute(self, ctx, member: discord.Member):
         mutessd = ['muted', 'Muted', 'mute', 'Mute', 'Silenced', 'silenced']
         try:
-            role = discord.utils.get(member.guild.roles, name=mutessd)
+            try:
+                await member.remove_roles(discord.utils.get(member.guild.roles, name='muted'))
+            except:
+                try:
+                    await member.remove_roles(discord.utils.get(member.guild.roles, name='mute'))
+                except:
+                    try:
+                        await member.remove_roles(discord.utils.get(member.guild.roles, name='silenced'))
+                    except:
+                        await ctx.send(f"User is not muted.")
             await member.remove_roles(role)
-            await ctx.send(f"I have muted **{member.name}**.\n\nResponsible Moderator: **{ctx.author}**")
+            await ctx.send(f"I have muted **{member.name}**.\nResponsible Moderator: **{ctx.author}**")
         except Exception as e:
             await ctx.send(f"```{e}```")
 
