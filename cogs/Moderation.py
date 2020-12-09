@@ -209,14 +209,11 @@ class Moderation(commands.Cog):
     async def mute(self, ctx, member: discord.Member):
         mutessd = ['muted', 'Muted', 'mute', 'Mute', 'Silenced', 'silenced']
         try:
-            try:
-                await member.add_roles(discord.utils.get(member.guild.roles, name='Muted'))
-            except:
-                await ctx.send(f"I can't find the `muterole`. You can either make a role named `Muted` or use the `{prefix}setup` command.")
-                return
+            await member.add_roles(discord.utils.get(member.guild.roles, name='Muted'))
             await ctx.send(f"I have muted **{member.name}**.\nResponsible Moderator: **{ctx.author}**")
         except Exception as e:
             await ctx.send(f"```{e}```")
+            #await ctx.send(f"I can't find the `muterole`. You can either make a role named `Muted` or use the `{prefix}setup` command.")
 
     @commands.command(pass_context=True)
     @commands.guild_only()
