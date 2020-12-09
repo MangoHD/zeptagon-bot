@@ -177,36 +177,38 @@ class Moderation(commands.Cog):
     @commands.has_permissions(ban_members = True)
     async def unban(self, ctx, *, member):
         try:
-            userid = int(member)
-            user = await discord.utils.get(discord.Member, id=userid)
-            try:
-                await ctx.guild.unban(user)
-                await ctx.send(f"{ctx.author.mention}, I have unbanned **{user}**.\n\nResponsible Moderator: **{ctx.author}**")
-                return
-            except Exception as e:
-                await ctx.send(f"```{e}```")
-        except:
-            banned_users = await ctx.guild.bans()
-            member_name, member_discriminator = member.split('#')
+            if '#' in str(member):
+                banned_users = await ctx.guild.bans()
+                member_name, member_discriminator = member.split('#')
 
-            for ban_entry in banned_users:
-                user = ban_entry.user
+                for ban_entry in banned_users:
+                    user = ban_entry.user
 
-                if (user.name, user.discriminator) == (member_name, member_discriminator):
-                    try:
-                        await ctx.guild.unban(user)
-                        await ctx.send(f"{ctx.author.mention}, I have unbanned **{user}**.")
-                        return
-                    except Exception as e:
-                        await ctx.send(f"```{e}```")
+                    if (user.name, user.discriminator) == (member_name, member_discriminator):
+                        try:
+                            await ctx.guild.unban(user)
+                            await ctx.send(f"{ctx.author.mention}, I have unbanned **{user}**.")
+                            return
+                        except Exception as e:
+                            await ctx.send(f"```{e}```")
+            else:
+                userid = int(member)
+                user = await discord.utils.get(discord.Member, id=userid)
+                try:
+                    await ctx.guild.unban(user)
+                    await ctx.send(f"{ctx.author.mention}, I have unbanned **{user}**.\n\nResponsible Moderator: **{ctx.author}**")
+                    return
+                except Exception as e:
+                    await ctx.send(f"```{e}```")
+        except Exception as e:
+            await ctx.send("```{}```".format(e))
 
     @commands.command()
     @commands.has_guild_permissions(mute_members=True)
     async def mute(self, ctx, member: discord.Member):
 
-        mutessd = ['muted', 'Muted']
         try:
-            role = discord.utils.get(ctx.guild.roles, name=f'{mutessd}')
+            role = discord.utils.get(ctx.guild.roles, name='muted')
             await member.add_roles(role)
             await ctx.channel.send(f"I have muted **{member.name}**.\n\nResponsible Moderator: **{ctx.author}**")
         except Exception as e:
