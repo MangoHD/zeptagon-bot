@@ -27,7 +27,7 @@ class Moderation(commands.Cog):
         except Exception as e:
             await ctx.send(f"```{e}```")
 
-    @commands.command(pass_context=True)
+    @commands.command(pass_context=True, aliases=['addrole'])
     @commands.guild_only()
     @commands.has_permissions(manage_roles = True)
     async def giverole(self, ctx, user: discord.Member, role: discord.Role):
@@ -42,11 +42,11 @@ class Moderation(commands.Cog):
     @commands.has_permissions(manage_messages = True)
     async def purge(self, ctx, amount: int):
         try:
-            if amount < 500:
+            if amount < 501:
                 await ctx.channel.purge(limit=amount+1)
                 await ctx.send("Deleted {} messages.".format(amount))
             else:
-                await ctx.send("Unable to delete messages. Maximum is **500** messages.")
+                await ctx.send("Unable to delete messages. I am only able to remove **500** or less messages.")
         except Exception as e:
             await ctx.send(f'```{e}```')
 
@@ -203,19 +203,18 @@ class Moderation(commands.Cog):
         except Exception as e:
             await ctx.send("```{}```".format(e))
 
-    @commands.command()
+    @commands.command(pass_context=True)
     @commands.has_guild_permissions(mute_members=True)
     async def mute(self, ctx, member: discord.Member):
+        mutessd = ['muted', 'Muted', 'mute', 'Mute', 'Silenced', 'silenced']
 
         try:
-            role = discord.utils.get(ctx.guild.roles, name='muted')
-            await asyncio.sleep(0.5)
-            await member.add_roles(role)
+            await member.add_roles(discord.utils.get(user.guild.roles, name=mutessd))
             await ctx.channel.send(f"I have muted **{member.name}**.\n\nResponsible Moderator: **{ctx.author}**")
         except Exception as e:
             await ctx.send(f"```{e}```")
 
-    @commands.command()
+    @commands.command(pass_context=True)
     @commands.has_guild_permissions(mute_members=True)
     async def unmute(self, ctx, member: discord.Member):
 
