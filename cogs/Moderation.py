@@ -226,7 +226,6 @@ class Moderation(commands.Cog):
             except:
                 await ctx.send(f"User is not muted.")
                 return
-            await member.remove_roles(role)
             await ctx.send(f"I have muted **{member.name}**.\nResponsible Moderator: **{ctx.author}**")
         except Exception as e:
             await ctx.send(f"```{e}```")
