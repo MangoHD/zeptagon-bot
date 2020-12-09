@@ -210,7 +210,7 @@ class Moderation(commands.Cog):
         mutessd = ['muted', 'Muted', 'mute', 'Mute', 'Silenced', 'silenced']
         try:
             try:
-                await member.add_roles(discord.utils.get(member.guild.roles, name='muted' or 'Muted'))
+                await member.add_roles(discord.utils.get(member.guild.roles, name='Muted'))
             except:
                 await ctx.send(f"I can't find the `muterole`. You can either make a role named `Muted` or use the `{prefix}setup` command.")
                 return
@@ -225,7 +225,7 @@ class Moderation(commands.Cog):
         mutessd = ['muted', 'Muted', 'mute', 'Mute', 'Silenced', 'silenced']
         try:
             try:
-                await member.remove_roles(discord.utils.get(member.guild.roles, name='muted' or 'Muted'))
+                await member.remove_roles(discord.utils.get(member.guild.roles, name='Muted'))
             except:
                 await ctx.send(f"User is not muted.")
                 return
