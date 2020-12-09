@@ -245,10 +245,11 @@ class Moderation(commands.Cog):
     @commands.has_guild_permissions(manage_server=True)
     async def setup(self, ctx):
         answers = []
+
         def check(m):
             return m.author == ctx.author and m.channel == ctx.channel
         try:
-            await ctx.send("Do you want to setup needed things for Zeptagon? (y|n)"
+            await ctx.send("Do you want to setup muterole and needed permissions? (yes|no)"
             "\nThis will add:\n    • Mute Role (Will not add if already found)\n    • Mute Role Permissions (Per Channel)\n    • ")
             msg = await self.bot.wait_for('message', timeout=35.0, check=check)
         except asyncio.TimeoutError:
@@ -257,6 +258,50 @@ class Moderation(commands.Cog):
         else:
             answers.appent(msg.content)
 
+        if answers[0] == 'yes' or 'y':
+            prgrs = 0.0
+
+            a = await ctx.send(f"Setting up things... (Progress: `{prgrs}%`)")
+            sleep(0.16)
+            await ctx.send(f"Finding `muterole`...")
+            try:
+                global muterole
+                muterole = discord.utils.get(ctx.guild.roles, name='Muted')
+                await ctx.send(f"Muterole found! (**{muterole.name}**)")
+            except:
+                try:
+                    muterole = discord.utils.get(ctx.guild.roles, name='muted')
+                    await ctx.send(f"Muterole found! (**{muterole.name}**)")
+                except:
+                    await ctx.send("Muterole not found. Creating new role...")
+                    sleep(0.2)
+                    try:
+                        role = await ctx.guild.create_role(name="Muted")
+                        await asyncio.sleep(0.16)
+                        prgrs = 23.4
+                        await a.edit(content=f"Setting up things... (Progress: `{prgrs}%`)")
+                        await ctx.send(f"Muterole created! (**{role.name}**)")
+                    except Exception as e:
+                        await ctx.send(f"```{e}```")
+            await asyncio.sleep(0.2)
+            await ctx.send(f"Setting Permissions for **{muterole.name}**...")
+            await asyncio.sleep(0.2)
+            try:
+                for channel in ctx.guild.TextChannels:
+                    await channel.set_permissions(muterole, send_messages=False)
+                    await asyncio.sleep(0.16)
+                prgrs = 78.6
+                await a.edit(content=f"Setting up things... (Progress: `{prgrs}%`)")
+                await ctx.send(f"Permissions created for **{len(ctx.guild.TextChannels)}** channels.")
+            except Exception as e:
+                await ctx.send(f"```{e}```")
+            await ctx.send("Assigning the created muterole as the main muterole...")
+            await asyncio.sleep(0.2)
+            prgrs = 100.0
+            await a.edit(content=f"Set up things. (Progress: `{prgrs}%`)")
+            await ctx.send("Saved! Setup finished. <:tick:769432064557842442>")
+        else:
+            await ctx.send("Command canceled. <:x_:781706203544813588>")
 
 
 def setup(bot):
