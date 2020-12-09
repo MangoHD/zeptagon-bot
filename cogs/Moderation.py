@@ -201,7 +201,7 @@ class Moderation(commands.Cog):
                         await ctx.send(f"```{e}```")
 
     @commands.command()
-    @commands.has_permissions(mute_members=True)
+    @commands.has_guild_permissions(mute_members=True)
     async def mute(self, ctx, member: discord.Member):
 
         mutessd = ['muted', 'Muted']
@@ -213,7 +213,7 @@ class Moderation(commands.Cog):
             await ctx.send(f"```{e}```")
 
     @commands.command()
-    @commands.has_permissions(mute_members=True)
+    @commands.has_guild_permissions(mute_members=True)
     async def unmute(self, ctx, member: discord.Member):
 
         try:
