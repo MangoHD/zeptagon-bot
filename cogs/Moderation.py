@@ -250,7 +250,7 @@ class Moderation(commands.Cog):
             return m.author == ctx.author and m.channel == ctx.channel
         try:
             await ctx.send("Do you want to setup muterole and needed permissions? (yes|no)"
-            "\nThis will add:\n    • Mute Role (Will not add if already found)\n    • Mute Role Permissions (Per Channel)\n    • ")
+            "\nThis will add:\n    • Mute Role (Will not add if already found)\n    • Mute Role Permissions (Per Channel)")
             msg = await self.bot.wait_for('message', timeout=35.0, check=check)
         except asyncio.TimeoutError:
             await ctx.send("Took too long to answer. Command canceled.")
@@ -258,7 +258,7 @@ class Moderation(commands.Cog):
         else:
             answers.appent(msg.content)
 
-        if answers[0] == 'yes' or 'y':
+        if answers[0] == 'yes':
             prgrs = 0.0
 
             a = await ctx.send(f"Setting up things... (Progress: `{prgrs}%`)")
