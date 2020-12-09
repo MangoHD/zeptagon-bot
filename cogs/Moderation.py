@@ -209,6 +209,7 @@ class Moderation(commands.Cog):
 
         try:
             role = discord.utils.get(ctx.guild.roles, name='muted')
+            await asyncio.sleep(0.5)
             await member.add_roles(role)
             await ctx.channel.send(f"I have muted **{member.name}**.\n\nResponsible Moderator: **{ctx.author}**")
         except Exception as e:
