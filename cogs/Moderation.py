@@ -300,8 +300,8 @@ class Moderation(commands.Cog):
         prgrs = 100.0
         await a.edit(content=f"Set up things. (Progress: `{prgrs}%`)")
         await ctx.send("Saved! Setup finished. <:tick:769432064557842442>")
-    else:
-        await ctx.send("Command canceled. <:x_:781706203544813588>")
+        #else:
+        #    await ctx.send("Command canceled. <:x_:781706203544813588>")
 
 
 def setup(bot):
