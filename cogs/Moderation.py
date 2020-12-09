@@ -273,7 +273,6 @@ class Moderation(commands.Cog):
                 await ctx.send(f"Muterole found! (**{muterole.name}**)")
             except:
                 await ctx.send("Muterole not found. Creating new role...")
-                sleep(0.2)
                 try:
                     role = await ctx.guild.create_role(name="Muted")
                     await asyncio.sleep(0.16)
