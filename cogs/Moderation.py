@@ -280,7 +280,7 @@ class Moderation(commands.Cog):
                     await a.edit(content=f"Setting up things... (Progress: `{prgrs}%`)")
                     await ctx.send(f"Muterole created! (**{role.name}**)")
                     await asyncio.sleep(0.16)
-                    await ctx.send(f"Setting Permissions for **{muterole.name}**...")
+                    await ctx.send(f"Setting Permissions for **{role.name}**...")
                     await asyncio.sleep(0.16)
                     try:
                         for channel in ctx.guild.channels:
