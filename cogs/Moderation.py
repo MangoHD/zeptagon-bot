@@ -262,7 +262,6 @@ class Moderation(commands.Cog):
         prgrs = 0.0
 
         a = await ctx.send(f"Setting up things... (Progress: `{prgrs}%`)")
-        sleep(0.16)
         await ctx.send(f"Finding `muterole`...")
         try:
             global muterole
