@@ -209,7 +209,14 @@ class Moderation(commands.Cog):
     async def mute(self, ctx, member: discord.Member):
         mutessd = ['muted', 'Muted', 'mute', 'Mute', 'Silenced', 'silenced']
         try:
-            await member.add_roles(discord.utils.get(member.guild.roles, name='Muted'))
+            try:
+                await member.add_roles(discord.utils.get(member.guild.roles, name='Muted'))
+            except:
+                try:
+                    await member.add_roles(discord.utils.get(member.guild.roles, name='muted'))
+                except:
+                    await ctx.send(f"I can't find the `muterole`. You can either make a role named `Muted` or use the `{prefix}setup` command.")
+                    return
             await ctx.send(f"I have muted **{member.name}**.\nResponsible Moderator: **{ctx.author}**")
         except Exception as e:
             await ctx.send(f"```{e}```")
@@ -222,13 +229,35 @@ class Moderation(commands.Cog):
         mutessd = ['muted', 'Muted', 'mute', 'Mute', 'Silenced', 'silenced']
         try:
             try:
-                await member.remove_roles(discord.utils.get(member.guild.roles, name='Muted'))
+                await member.add_roles(discord.utils.get(member.guild.roles, name='Muted'))
             except:
-                await ctx.send(f"User is not muted.")
-                return
+                try:
+                    await member.add_roles(discord.utils.get(member.guild.roles, name='muted'))
+                except:
+                    await ctx.send(f"User is not muted.")
+                    return
             await ctx.send(f"I have muted **{member.name}**.\nResponsible Moderator: **{ctx.author}**")
         except Exception as e:
             await ctx.send(f"```{e}```")
+
+    @commands.command(pass_context=True)
+    @commands.guild_only()
+    @commands.has_guild_permissions(manage_server=True)
+    async def setup(self, ctx):
+        answers = []
+        def check(m):
+            return m.author == ctx.author and m.channel == ctx.channel
+        try:
+            await ctx.send("Do you want to setup needed things for Zeptagon? (y|n)"
+            "\nThis will add:\n    • Mute Role (Will not add if already found)\n    • Mute Role Permissions (Per Channel)\n    • ")
+            msg = await self.bot.wait_for('message', timeout=35.0, check=check)
+        except asyncio.TimeoutError:
+            await ctx.send("Took too long to answer. Command canceled.")
+            return
+        else:
+            answers.appent(msg.content)
+
+
 
 def setup(bot):
     bot.add_cog(Moderation(bot))
