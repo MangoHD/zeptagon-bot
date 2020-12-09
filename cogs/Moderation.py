@@ -284,7 +284,7 @@ class Moderation(commands.Cog):
                     await asyncio.sleep(0.16)
                     try:
                         for channel in ctx.guild.channels:
-                            await channel.set_permissions(muterole, send_messages=False)
+                            await channel.set_permissions(role, send_messages=False)
                             await asyncio.sleep(0.16)
                         prgrs = 78.6
                         await a.edit(content=f"Setting up things... (Progress: `{prgrs}%`)")
