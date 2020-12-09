@@ -286,7 +286,7 @@ class Moderation(commands.Cog):
         await ctx.send(f"Setting Permissions for **{muterole.name}**...")
         await asyncio.sleep(0.2)
         try:
-            for channel in ctx.guild.TextChannels:
+            for channel in ctx.guild.channels:
                 await channel.set_permissions(muterole, send_messages=False)
                 await asyncio.sleep(0.16)
             prgrs = 78.6
