@@ -242,7 +242,7 @@ class Moderation(commands.Cog):
 
     @commands.command(pass_context=True)
     @commands.guild_only()
-    @commands.has_guild_permissions(manage_server=True)
+    @commands.has_guild_permissions(manage_guild=True)
     async def setup(self, ctx):
         answers = []
 
