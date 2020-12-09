@@ -203,5 +203,29 @@ class Moderation(commands.Cog):
         except Exception as e:
             await ctx.send("```{}```".format(e))
 
+    @commands.command(pass_context = True)
+    @commands.guild_only()
+    @commands.has_guild_permissions(mute_members=True)
+    async def mute(self, ctx, member: discord.Member):
+        mutessd = ['muted', 'Muted', 'mute', 'Mute', 'Silenced', 'silenced']
+        try:
+            role = discord.utils.get(member.guild.roles, name=mutessd)
+            await member.add_roles(role)
+            await ctx.send(f"I have muted **{member.name}**.\n\nResponsible Moderator: **{ctx.author}**")
+        except Exception as e:
+            await ctx.send(f"```{e}```")
+
+    @commands.command(pass_context=True)
+    @commands.guild_only()
+    @commands.has_guild_permissions(mute_members=True)
+    async def unmute(self, ctx, member: discord.Member):
+        mutessd = ['muted', 'Muted', 'mute', 'Mute', 'Silenced', 'silenced']
+        try:
+            role = discord.utils.get(member.guild.roles, name=mutessd)
+            await member.remove_roles(role)
+            await ctx.send(f"I have muted **{member.name}**.\n\nResponsible Moderator: **{ctx.author}**")
+        except Exception as e:
+            await ctx.send(f"```{e}```")
+
 def setup(bot):
     bot.add_cog(Moderation(bot))
