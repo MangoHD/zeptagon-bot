@@ -68,7 +68,7 @@ setup(zept)
 async def mute(ctx, member: discord.Member):
     mutessd = ['muted', 'Muted', 'mute', 'Mute', 'Silenced', 'silenced']
     try:
-        role = discord.utils.get(member.server.roles, name='Muted')
+        role = discord.utils.get(member.guild.roles, name='Muted')
         await ctx.add_roles(member, role)
         await ctx.send(f"I have muted **{member.name}**.\n\nResponsible Moderator: **{ctx.author}**")
     except Exception as e:
