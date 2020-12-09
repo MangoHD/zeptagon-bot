@@ -275,22 +275,19 @@ class Moderation(commands.Cog):
                 await ctx.send("Muterole not found. Creating new role...")
                 try:
                     role = await ctx.guild.create_role(name="Muted")
-                    await asyncio.sleep(0.16)
+                    await asyncio.sleep(0.1)
                     prgrs = 23.4
                     await a.edit(content=f"Setting up things... (Progress: `{prgrs}%`)")
                     await ctx.send(f"Muterole created! (**{role.name}**)")
                 except Exception as e:
                     await ctx.send(f"```{e}```")
-        await asyncio.sleep(0.2)
+        await asyncio.sleep(0.1)
         await ctx.send(f"Setting Permissions for **{muterole.name}**...")
-        await asyncio.sleep(0.2)
+        await asyncio.sleep(0.1)
         try:
             for channel in ctx.guild.channels:
-                if channel == discord.TextChannel:
-                    await channel.set_permissions(muterole, send_messages=False)
-                    await asyncio.sleep(0.16)
-                else:
-                    pass
+                await channel.set_permissions(muterole, send_messages=False)
+                await asyncio.sleep(0.16)
             prgrs = 78.6
             await a.edit(content=f"Setting up things... (Progress: `{prgrs}%`)")
             await ctx.send(f"Permissions created for **{len(ctx.guild.channels)}** channels.")
