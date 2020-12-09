@@ -287,11 +287,14 @@ class Moderation(commands.Cog):
         await asyncio.sleep(0.2)
         try:
             for channel in ctx.guild.channels:
-                await channel.set_permissions(muterole, send_messages=False)
-                await asyncio.sleep(0.16)
+                if channel == discord.TextChannel:
+                    await channel.set_permissions(muterole, send_messages=False)
+                    await asyncio.sleep(0.16)
+                else:
+                    pass
             prgrs = 78.6
             await a.edit(content=f"Setting up things... (Progress: `{prgrs}%`)")
-            await ctx.send(f"Permissions created for **{len(ctx.guild.TextChannels)}** channels.")
+            await ctx.send(f"Permissions created for **{len(ctx.guild.channels)}** channels.")
         except Exception as e:
             await ctx.send(f"```{e}```")
         await ctx.send("Assigning the created muterole as the main muterole...")
