@@ -201,9 +201,10 @@ class Moderation(commands.Cog):
                         await ctx.send(f"```{e}```")
 
     @commands.command()
+    @commands.has_permissions(mute_members=True)
     async def mute(self, ctx, member: discord.Member):
 
-        mutessd = ['muted', 'Muted', 'mute', 'Mute', 'silenced', 'Silenced']
+        mutessd = ['muted', 'Muted']
         try:
             role = discord.utils.get(ctx.guild.roles, name=f'{mutessd}')
             await member.add_roles(role)
@@ -211,7 +212,7 @@ class Moderation(commands.Cog):
         except Exception as e:
             await ctx.send(f"```{e}```")
 
-    @commands.command(pass_context = True)
+    @commands.command()
     @commands.has_permissions(mute_members=True)
     async def unmute(self, ctx, member: discord.Member):
 
