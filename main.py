@@ -62,18 +62,20 @@ setup(zept)
 #        COMMANDS PUT IN HERE ARE JUST COMMANDS THAT DON'T WORK IN COGS        #
 #==============================================================================#
 
-@zept.command(pass_context=True)
+@zept.command(pass_context = True)
+@commands.guild_only()
 @commands.has_guild_permissions(mute_members=True)
 async def mute(ctx, member: discord.Member):
     mutessd = ['muted', 'Muted', 'mute', 'Mute', 'Silenced', 'silenced']
-
     try:
-        await member.add_roles(discord.utils.get(member.guild.roles, name=mutessd))
-        await ctx.channel.send(f"I have muted **{member.name}**.\n\nResponsible Moderator: **{ctx.author}**")
+        role = discord.utils.get(member.server.roles, name='Muted')
+        await ctx.add_roles(member, role)
+        await ctx.send(f"I have muted **{member.name}**.\n\nResponsible Moderator: **{ctx.author}**")
     except Exception as e:
         await ctx.send(f"```{e}```")
 
 @zept.command(pass_context=True)
+@commands.guild_only()
 @commands.has_guild_permissions(mute_members=True)
 async def unmute(ctx, member: discord.Member):
     mutessd = ['muted', 'Muted', 'mute', 'Mute', 'Silenced', 'silenced']
