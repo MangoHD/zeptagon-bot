@@ -1,3 +1,6 @@
+# --------------------- Repl.it things -------------------- #
+from webserver import keep_alive
+
 # ------------------------ Modules ------------------------ #
 
 import discord
