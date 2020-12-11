@@ -1,7 +1,3 @@
-#if n1 == '0':
-#if n2 == '0':
-
-
 def multiply(arg5 : int, arg6 : int, n1 : int = '0', n2 : int = '0'):
     if n1 == '0':
         return (f"{arg5} × {arg6} = {arg5 * arg6}")
@@ -31,8 +27,4 @@ def substract(arg11 : int, arg12 : int, n1 : int = '0', n2 : int = '0'):
     return (f"{arg11} - {arg12} - {n1} - {n2} = {arg11 - arg12 - n1 - n2}")
 
 def square(arg34_1, arg34_2):
-    # return arg34_1 ** arg34_2
     return (f"{arg34_1} ^ {arg34_2} = {arg34_1 ** arg34_2}")
-
-def pi():
-    return '3.141592653589793238462643383279502884197169399375105820974944592307816406286208998628034825342117067'

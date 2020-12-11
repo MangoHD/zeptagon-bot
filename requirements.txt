@@ -5,3 +5,5 @@ pillow
 pyfiglet
 boto
 requests
+python-dotenv
+flask

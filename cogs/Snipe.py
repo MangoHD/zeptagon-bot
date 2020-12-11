@@ -5,13 +5,15 @@ import datetime
 import random
 from discord.ext import commands
 
-getprefix = [os.environ['BOT_PREFIX'], os.environ['BOT_PREFIX2']]
-prefix = os.environ['BOT_PREFIX']
-motd = os.environ['BOT_MOTD']
-footer = os.environ['BOT_FOOTER']
+getprefix = ['z!', 'Z!']
+prefix = 'z!'
+motd = 'Newly made bot :D'
+footer = 'Zeptagon'
 emcolor = 0x777777
 ercolor = 0xff0000
-fieldfooter = "Links: [Support Server](https://discord.gg/89eu5WD)・[Invite Me](https://discord.com/oauth2/authorize?client_id=785496485659148359&permissions=8&scope=bot)"
+def footerd(emb):
+    emb.add_field(name='_ _', value='Links: [Support Server](https://discord.gg/89eu5WD)・[Invite Me](https://discord.com/oauth2/authorize?client_id=785496485659148359&permissions=8&scope=bot)')
+    emb.set_footer(text='Zeptagon', icon_url='https://cdn.discordapp.com/avatars/785496485659148359/0fc85eb060bb37c35726fabe791170fe.webp?size=1024')
 
 class Snipe(commands.Cog):
     def __init__(self, bot):
@@ -47,7 +49,7 @@ class Snipe(commands.Cog):
                 color=emcolor
             )
             emb.set_author(name=snipe_message_author, icon_url=snipe_message_author.avatar_url)
-            emb.add_field(name="_ _", value=fieldfooter)
+            footerd(emb)
             await ctx.send(embed=emb)
         else:
             await ctx.send("There's nothing to snipe.")

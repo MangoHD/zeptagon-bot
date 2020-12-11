@@ -3,13 +3,15 @@ import os
 import asyncio
 from discord.ext import commands
 
-getprefix = [os.environ['BOT_PREFIX'], os.environ['BOT_PREFIX2']]
-prefix = os.environ['BOT_PREFIX']
-motd = os.environ['BOT_MOTD']
-footer = os.environ['BOT_FOOTER']
+getprefix = ['z!', 'Z!']
+prefix = 'z!'
+motd = 'Newly made bot :D'
+footer = 'Zeptagon'
 emcolor = 0x777777
 ercolor = 0xff0000
-fieldfooter = "Links: [Support Server](https://discord.gg/89eu5WD)・[Invite Me](https://discord.com/oauth2/authorize?client_id=785496485659148359&permissions=8&scope=bot)"
+def footerd(emb):
+    emb.add_field(name='_ _', value='Links: [Support Server](https://discord.gg/89eu5WD)・[Invite Me](https://discord.com/oauth2/authorize?client_id=785496485659148359&permissions=8&scope=bot)')
+    emb.set_footer(text='Zeptagon', icon_url='https://cdn.discordapp.com/avatars/785496485659148359/0fc85eb060bb37c35726fabe791170fe.webp?size=1024')
 
 class Moderation(commands.Cog):
     def __init__(self, bot):
@@ -77,8 +79,7 @@ class Moderation(commands.Cog):
         kickmessage.add_field(name='Reason:', value=reason, inline=False)
         kickmessage.set_thumbnail(
             url=ctx.author.avatar_url)
-        kickmessage.add_field(name="_ _", value=fieldfooter)
-        kickmessage.set_footer(text=footer)
+        footerd(kickmessage)
 
         kickdm = discord.Embed(
             title='Kicked',
@@ -90,8 +91,7 @@ class Moderation(commands.Cog):
         kickdm.add_field(name='Reason:', value=reason, inline=False)
         kickdm.set_thumbnail(
             url=ctx.author.avatar_url)
-        kickdm.add_field(name="_ _", value=fieldfooter)
-        kickdm.set_footer(text=footer)
+        footerd(kickdm)
 
         nokickperms = discord.Embed(
             title="Invalid!",
@@ -102,8 +102,7 @@ class Moderation(commands.Cog):
 
         nokickperms.set_thumbnail(
             url=ctx.author.avatar_url)
-        nokickperms.add_field(name="_ _", value=fieldfooter)
-        nokickperms.set_footer(text=footer)
+        footerd(nokickperms)
 
         try:
             try:
@@ -132,8 +131,7 @@ class Moderation(commands.Cog):
         banmessage.add_field(name='Reason:', value=reason, inline=False)
         banmessage.set_thumbnail(
             url=ctx.author.avatar_url)
-        banmessage.add_field(name="_ _", value=fieldfooter)
-        banmessage.set_footer(text=footer)
+        footerd(banmessage)
 
         bandm = discord.Embed(
             title='Banned',
@@ -145,8 +143,7 @@ class Moderation(commands.Cog):
         bandm.add_field(name='Reason:', value=reason, inline=False)
         bandm.set_thumbnail(
             url=ctx.author.avatar_url)
-        bandm.add_field(name="_ _", value=fieldfooter)
-        bandm.set_footer(text=footer)
+        footerd(bandm)
 
         nobanperms = discord.Embed(
             title="Invalid!",
@@ -156,8 +153,7 @@ class Moderation(commands.Cog):
         )
 
         nobanperms.set_thumbnail(url=ctx.author.avatar_url)
-        nobanperms.add_field(name="_ _", value=fieldfooter)
-        nobanperms.set_footer(text=footer)
+        footerd(nobanperms)
         try:
             try:
                 #e = await member.send(embed=bandm)

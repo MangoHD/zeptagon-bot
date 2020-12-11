@@ -5,13 +5,15 @@ import datetime
 import random
 from discord.ext import commands
 
-getprefix = [os.environ['BOT_PREFIX'], os.environ['BOT_PREFIX2']]
-prefix = os.environ['BOT_PREFIX']
-motd = os.environ['BOT_MOTD']
-footer = os.environ['BOT_FOOTER']
+getprefix = ['z!', 'Z!']
+prefix = 'z!'
+motd = 'Newly made bot :D'
+footer = 'Zeptagon'
 emcolor = 0x777777
 ercolor = 0xff0000
-fieldfooter = "Links: [Support Server](https://discord.gg/89eu5WD)・[Invite Me](https://discord.com/oauth2/authorize?client_id=785496485659148359&permissions=8&scope=bot)"
+def footerd(emb):
+    emb.add_field(name='_ _', value='Links: [Support Server](https://discord.gg/89eu5WD)・[Invite Me](https://discord.com/oauth2/authorize?client_id=785496485659148359&permissions=8&scope=bot)')
+    emb.set_footer(text='Zeptagon', icon_url='https://cdn.discordapp.com/avatars/785496485659148359/0fc85eb060bb37c35726fabe791170fe.webp?size=1024')
 
 class GiveawayCommands(commands.Cog):
     def __init__(self, bot):
@@ -124,9 +126,9 @@ class GiveawayCommands(commands.Cog):
             description=f"Host: {ctx.author.mention}\nWinners: {answers[3]}\nTime Remaining: {answers[1]}\n\nReact to 🎉 to enter the giveaway!",
             colour=discord.Color.blue(),
             timestamp=end)
-        embed.set_author(name=prize, icon_url="https://cdn.discordapp.com/attachments/743425064921464833/767981650070994984/86c9a4dde5bb348b53f2fb7ff099e9d5-square-wrapped-gift-box-by-vexels.png")
-        embed.set_footer(text=f"Ends at")
-        embed.add_field(name="_ _", value=fieldfooter)
+        embed.add_field(name="_ _", value='Links: [Support Server](https://discord.gg/89eu5WD)・[Invite Me](https://discord.com/oauth2/authorize?client_id=785496485659148359&permissions=8&scope=bot)')
+        embed.set_footer(text="Ends at", icon_url='https://cdn.discordapp.com/avatars/785496485659148359/0fc85eb060bb37c35726fabe791170fe.webp?size=1024')
+        embed.add_field(name="_ _", value='Links: [Support Server](https://discord.gg/89eu5WD)・[Invite Me](https://discord.com/oauth2/authorize?client_id=785496485659148359&permissions=8&scope=bot)')
         msg = await channel.send("<:CH_present:767981864132018176> **GIVEAWAY** <:CH_present:767981864132018176>", embed=embed)
         await msg.add_reaction("🎉")
         await ctx.send(ctx.author.mention, embed=discord.Embed(description=f"<:tick:769432064557842442> Successfully started giveaway in {channel.mention}", color=discord.Color.green()))
@@ -143,8 +145,8 @@ class GiveawayCommands(commands.Cog):
             colour=emcolor,
             timestamp=end)
         embed2.set_author(name=prize, icon_url="https://cdn.discordapp.com/attachments/743425064921464833/767981650070994984/86c9a4dde5bb348b53f2fb7ff099e9d5-square-wrapped-gift-box-by-vexels.png")
-        embed2.add_field(name="_ _", value=fieldfooter)
-        embed2.set_footer(text="Ended at")
+        embed2.add_field(name="_ _", value='Links: [Support Server](https://discord.gg/89eu5WD)・[Invite Me](https://discord.com/oauth2/authorize?client_id=785496485659148359&permissions=8&scope=bot)')
+        embed2.set_footer(text="Ended at", icon_url='https://cdn.discordapp.com/avatars/785496485659148359/0fc85eb060bb37c35726fabe791170fe.webp?size=1024')
         await channel.send(f"🎊 **Congratulations** {', '.join(winners)}! You have won **{prize}**!")
         await msg.edit(content="<:CH_present:767981864132018176> **GIVEAWAY ENDED** <:CH_present:767981864132018176>", embed=embed2)
 
@@ -160,11 +162,11 @@ class GiveawayCommands(commands.Cog):
         users = await msg2.reactions[0].users().flatten()
         users.pop(users.index(self.bot.user))
         winner = random.choice(users)
+        await channel.send(f"🎊 **Congratulations** {winner.mention}! You are the new winner!")
         emb = discord.Embed(
-            description=f"Successfully re-rolled giveaway in {channel.mention}",
+            description=f"<:tick:769432064557842442> Successfully re-rolled giveaway in {channel.mention}",
             color=discord.Color.green())
         await ctx.send(embed=emb)
-        await channel.send(f"🎊 **Congratulations** {winner.mention}! You are the new winner!")
 
     @commands.command(aliases=['gend'])
     @commands.guild_only()
@@ -178,11 +180,11 @@ class GiveawayCommands(commands.Cog):
         users = await msg2.reactions[0].users().flatten()
         users.pop(users.index(self.bot.user))
         winner = random.choice(users)
+        await channel.send(f"🎊 **Congratulations** {winner.mention}! You have won the giveaway!")
         emb = discord.Embed(
-            description=f"Successfully ended giveaway in {channel.mention}",
+            description=f"<:tick:769432064557842442> Successfully ended giveaway in {channel.mention}",
             color=discord.Color.green())
         await ctx.send(embed=emb)
-        await channel.send(f"🎊 **Congratulations** {winner.mention}! You have won the giveaway!")
 
 def setup(bot):
     bot.add_cog(GiveawayCommands(bot))
