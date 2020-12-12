@@ -15,6 +15,8 @@ import pyfiglet
 import requests
 import re
 import base64
+import urllib
+from urllib.request import Request, urlopen
 import dyv_math as mfmath
 from PIL import Image
 from io import BytesIO
@@ -36,10 +38,27 @@ zept.remove_command('help')
 @zept.event
 async def on_ready():
     print("Bot Ready.")
+    with open("runs.json", "r") as runss:
+        runs = json.load(runss)
+    embeds = []
+    embed = {
+        "color": 0x00ff00,
+        "title": "Attempt #"+runs.get('run_amount'),
+        "description": "Run Success\nAttempted at `"+datetime.now().strftime("%H:%M:%S")+"`.",
+        "footer": {
+        
+        }
+    }
+    embeds.append(embed)
+    webhook = {
+        "content": "",
+        "embeds": embeds,
+        "username": "Zeptagon Logs",
+        "avatar_url": "https://cdn.discordapp.com/avatars/785496485659148359/0fc85eb060bb37c35726fabe791170fe.webp?size=1024"
+    }
+    # TO BE CONTINUED - LINE IS HERE LAST TIME
     print(f"Current prefix is {prefix}")
     print(f"Logged in as {zept.user.name}#{zept.user.discriminator}.")
-
-# -------------------- Rich Presence ---------------------- #
 
 async def presence():
     await zept.wait_until_ready()
@@ -55,11 +74,12 @@ async def presence():
 zept.loop.create_task(presence())
 
 def setup(bot):
-    exts = ['ErrorHandler', 'Moderation', 'Giveaway', 'Snipe']
+    exts = ['ErrorHandler', 'Moderation', 'Giveaway', 'Snipe', 'Math']
 
     if __name__ == "__main__":
         for cog in exts:
             bot.load_extension(f"cogs.{cog}")
+            print(f"Loaded {cog}")
 
 setup(zept)
 
