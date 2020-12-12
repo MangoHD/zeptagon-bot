@@ -44,7 +44,7 @@ async def on_ready():
     embed = {
         "color": 0x00ff00,
         "title": "Attempt #"+runs.get('run_amount'),
-        "description": "Run Success\nAttempted at `"+datetime.now().strftime("%H:%M:%S")+"`.",
+        "description": "Run Success\nAttempted at `"+datetime.datetime.now().strftime("%H:%M:%S")+"`.",
         "footer": {
         
         }
