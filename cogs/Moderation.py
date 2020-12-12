@@ -107,7 +107,7 @@ class Moderation(commands.Cog):
         try:
             try:
                 #e = await member.send(embed=kickdm)
-                e = await member.send(f"You have been kicked from **{ctx.guild.name}**.\n\nResponsible Moderator: **{ctx.author}**")
+                f = await member.send(f"You have been kicked from **{ctx.guild.name}**.\n\nResponsible Moderator: **{ctx.author}**")
             except:
                 pass
             await member.kick(reason=reason)
@@ -116,7 +116,7 @@ class Moderation(commands.Cog):
         except Exception as e:
             #await ctx.send(embed=nokickperms)
             await ctx.send("```{}```".format(e))
-            await e.delete()
+            await f.delete()
 
     @commands.command()
     @commands.guild_only()
@@ -203,7 +203,6 @@ class Moderation(commands.Cog):
     @commands.guild_only()
     @commands.has_guild_permissions(mute_members=True)
     async def mute(self, ctx, member: discord.Member):
-        mutessd = ['muted', 'Muted', 'mute', 'Mute', 'Silenced', 'silenced']
         try:
             try:
                 await member.add_roles(discord.utils.get(member.guild.roles, name='Muted'))
@@ -222,7 +221,6 @@ class Moderation(commands.Cog):
     @commands.guild_only()
     @commands.has_guild_permissions(mute_members=True)
     async def unmute(self, ctx, member: discord.Member):
-        mutessd = ['muted', 'Muted', 'mute', 'Mute', 'Silenced', 'silenced']
         try:
             try:
                 await member.add_roles(discord.utils.get(member.guild.roles, name='Muted'))

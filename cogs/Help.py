@@ -21,10 +21,10 @@ class Help(commands.Cog):
 
     @commands.command(aliases=['commands'])
     @commands.guild_only()
-    async def help(ctx, page):
+    async def help(self, ctx, page):
         emb = discord.Embed(
             title='Help Commands',
-            description=''
+            description='',
             color=emcolor
         )
 
