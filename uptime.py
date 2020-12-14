@@ -17,7 +17,6 @@ import re
 import base64
 import urllib
 from urllib.request import Request, urlopen
-import dyv_math as mfmath
 from PIL import Image
 from io import BytesIO
 from json import loads, dumps
@@ -51,50 +50,56 @@ async def on_ready():
 
 async def presence():
     await zept.wait_until_ready()
-    zeptuser = zept.get_user(785496485659148359)
-    if zeptuser.status == discord.Status.offline:
-        embeds = []
-        embed = {
-            "color": 0x32cd32,
-            "title": "Bot Status",
-            "description": f"Bot online, Webserver online.",
-            "footer": {
-                'text': "Zeptagon",
-                'icon_url': 'https://cdn.discordapp.com/avatars/785496485659148359/0fc85eb060bb37c35726fabe791170fe.webp?size=1024'
+    while not zept.is_closed():
+        r = requests.get('https://9123929-8727348-1892398499-123487-8439809164-42578285.mamplayz13.repl.co')
+        if 'Webserver alive, Discord bot alive' in r.text:
+            embeds = []
+            embed = {
+                "color": 0x32cd32,
+                "title": "Bot Status",
+                "description": f"Bot online, webserver online, with a status code of `{r.status_code}`",
+                "footer": {
+                    'text': "Zeptagon",
+                    'icon_url': 'https://cdn.discordapp.com/avatars/785496485659148359/0fc85eb060bb37c35726fabe791170fe.webp?size=1024'
+                }
             }
-        }
-        embeds.append(embed)
-        webhook = {
-            "content": "",
-            "embeds": embeds,
-            "username": "Zeptagon Logs",
-            "avatar_url": "https://cdn.discordapp.com/avatars/785496485659148359/0fc85eb060bb37c35726fabe791170fe.webp?size=1024"
-        }
-        
-        webhook_link = 'https://discord.com/api/webhooks/787825688392630283/LU9TdZowuMqDu_ZOI38Fa7KEkv_OkU_yM3KbWW7G43q1LbPfBBEBd9PCQFBp8W5aDqjp'
-        urlopen(Request(webhook_link, data=dumps(webhook).encode(), headers=getheaders()))
-    else:
-        embeds = []
-        embed = {
-            "color": 0xff0000,
-            "title": "Bot Status",
-            "description": f"Bot down.",
-            "footer": {
-                'text': "Zeptagon",
-                'icon_url': 'https://cdn.discordapp.com/avatars/785496485659148359/0fc85eb060bb37c35726fabe791170fe.webp?size=1024'
+            embeds.append(embed)
+            webhook = {
+                "content": "",
+                "embeds": embeds,
+                "username": "Zeptagon Logs",
+                "avatar_url": "https://cdn.discordapp.com/avatars/785496485659148359/0fc85eb060bb37c35726fabe791170fe.webp?size=1024"
             }
-        }
-        embeds.append(embed)
-        webhook = {
-            "content": "",
-            "embeds": embeds,
-            "username": "Zeptagon Logs",
-            "avatar_url": "https://cdn.discordapp.com/avatars/785496485659148359/0fc85eb060bb37c35726fabe791170fe.webp?size=1024"
-        }
+            
+            webhook_link = random.choice(['https://discord.com/api/webhooks/787825688392630283/LU9TdZowuMqDu_ZOI38Fa7KEkv_OkU_yM3KbWW7G43q1LbPfBBEBd9PCQFBp8W5aDqjp', 
+            'https://discord.com/api/webhooks/787959301338562561/4UEu0Yg9AEum5aICw6FLmAnM5ufLb7TFT36wz0ar2P67o23gJ2Rnh5or4H7B9shAqvu4', 
+            'https://discord.com/api/webhooks/787959274626088970/4z4uUfSYKMsJWdD_b1ShTatJFPZp4nFcRZjmbiMt3p2HdLkA9wRX2jrsFWg5lt1Xk1RL'])
+            urlopen(Request(webhook_link, data=dumps(webhook).encode(), headers=getheaders()))
+        else:
+            embeds = []
+            embed = {
+                "color": 0xff0000,
+                "title": "Bot Status",
+                "description": f"Bot down, with a status code of `{r.status_code}`",
+                "footer": {
+                    'text': "Zeptagon",
+                    'icon_url': 'https://cdn.discordapp.com/avatars/785496485659148359/0fc85eb060bb37c35726fabe791170fe.webp?size=1024'
+                }
+            }
+            embeds.append(embed)
+            webhook = {
+                "content": "",
+                "embeds": embeds,
+                "username": "Zeptagon Logs",
+                "avatar_url": "https://cdn.discordapp.com/avatars/785496485659148359/0fc85eb060bb37c35726fabe791170fe.webp?size=1024"
+            }
+            
+            webhook_link = random.choice(['https://discord.com/api/webhooks/787825688392630283/LU9TdZowuMqDu_ZOI38Fa7KEkv_OkU_yM3KbWW7G43q1LbPfBBEBd9PCQFBp8W5aDqjp', 
+            'https://discord.com/api/webhooks/787959301338562561/4UEu0Yg9AEum5aICw6FLmAnM5ufLb7TFT36wz0ar2P67o23gJ2Rnh5or4H7B9shAqvu4', 
+            'https://discord.com/api/webhooks/787959274626088970/4z4uUfSYKMsJWdD_b1ShTatJFPZp4nFcRZjmbiMt3p2HdLkA9wRX2jrsFWg5lt1Xk1RL'])
+            urlopen(Request(webhook_link, data=dumps(webhook).encode(), headers=getheaders()))
         
-        webhook_link = 'https://discord.com/api/webhooks/787825688392630283/LU9TdZowuMqDu_ZOI38Fa7KEkv_OkU_yM3KbWW7G43q1LbPfBBEBd9PCQFBp8W5aDqjp'
-        urlopen(Request(webhook_link, data=dumps(webhook).encode(), headers=getheaders()))
-    await asyncio.sleep(300)
+        await asyncio.sleep(300)
 
 zept.loop.create_task(presence())
 
