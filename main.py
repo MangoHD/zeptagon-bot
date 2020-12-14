@@ -20,6 +20,7 @@ from urllib.request import Request, urlopen
 import dyv_math as mfmath
 from PIL import Image
 from io import BytesIO
+from json import loads, dumps
 from discord.ext import commands
 
 getprefix = ['z!', 'Z!']
@@ -40,23 +41,37 @@ async def on_ready():
     print("Bot Ready.")
     with open("runs.json", "r") as runss:
         runs = json.load(runss)
+    rns = str(runs.get("run_amount")+1)
+    j = "{\n\"run_amount\": "+rns+"\n}"
+    with open('runs.json', mode='w', encoding='UTF-8', errors='strict', buffering=1) as g:
+        g.write(j)
     embeds = []
     embed = {
         "color": 0x00ff00,
-        "title": "Attempt #"+runs.get('run_amount'),
-        "description": "Run Success\nAttempted at `"+datetime.datetime.now().strftime("%H:%M:%S")+"`.",
+        "title": "Run #"+str(runs.get('run_amount')),
+        "description": "Run Success\nAttempted at `"+datetime.datetime.utcnow().strftime("%d/%M/%Y %H:%M:%S")+"` UTC.",
         "footer": {
-        
+            'text': "Zeptagon",
+            'icon_url': 'https://cdn.discordapp.com/avatars/785496485659148359/0fc85eb060bb37c35726fabe791170fe.webp?size=1024'
         }
     }
     embeds.append(embed)
+    def getheaders(token=None, content_type="application/json"):
+        headers = {
+            "Content-Type": content_type,
+            "User-Agent": "Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.11 (KHTML, like Gecko) Chrome/23.0.1271.64 Safari/537.11"
+        }
+        if token:
+            headers.update({"Authorization": token})
+        return headers
     webhook = {
         "content": "",
         "embeds": embeds,
         "username": "Zeptagon Logs",
         "avatar_url": "https://cdn.discordapp.com/avatars/785496485659148359/0fc85eb060bb37c35726fabe791170fe.webp?size=1024"
     }
-    # TO BE CONTINUED - LINE IS HERE LAST TIME
+    webhook_link = 'https://discord.com/api/webhooks/787825688392630283/LU9TdZowuMqDu_ZOI38Fa7KEkv_OkU_yM3KbWW7G43q1LbPfBBEBd9PCQFBp8W5aDqjp'
+    urlopen(Request(webhook_link, data=dumps(webhook).encode(), headers=getheaders()))
     print(f"Current prefix is {prefix}")
     print(f"Logged in as {zept.user.name}#{zept.user.discriminator}.")
 
