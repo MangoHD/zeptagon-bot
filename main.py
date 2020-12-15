@@ -3,9 +3,6 @@ from webserver import keep_alive
 
 # ------------------------ Modules ------------------------ #
 
-
-
-
 import re
 import os
 import PIL
@@ -122,4 +119,4 @@ setup(zept)
 # ======= COMMANDS PUT IN HERE ARE JUST COMMANDS THAT DON'T WORK IN COGS ======= #
 
 keep_alive()
-zept.run(os.environ.get('DISCORD_BOT_SECRET'))
+zept.run(os.environ.get('TOKEN'))

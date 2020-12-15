@@ -15,7 +15,7 @@ class Help(commands.Cog):
     async def help(self, ctx, page: int = 1):
         emb = discord.Embed(
             title='Help Commands',
-            description='',
+            description='Current prefix is ',
             color=emcolor
         )
 
@@ -25,7 +25,9 @@ class Help(commands.Cog):
             {'name': 'Miscellaneous', 'value': f"`{prefix}help misc`"},
             {'name': 'Image', 'value': f"`{prefix}help image`"},
             {'name': 'Moderation', 'value': f"`{prefix}help mod`"},
-            {'name': 'Math', 'value': f"`{prefix}help math`"}
+            {'name': 'Math', 'value': f"`{prefix}help math`"},
+            {'name': 'Utilities', 'value': f"`{prefix}help utils`"},
+            {'name': 'Configuration', 'value': f"`{prefix}help config`"}
         ]
 
         for field in fields:
@@ -33,6 +35,8 @@ class Help(commands.Cog):
                 emb.add_field(name=field['name'], value=field['value'], inline=False)
 
         footerd(emb)
+
+        await ctx.send(embed=emb)
 
 def setup(bot):
     bot.add_cog(Help(bot))

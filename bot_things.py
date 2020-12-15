@@ -1,9 +1,9 @@
-import json, discord
+import json, discord, os
 from discord.ext import commands
 
 getprefix = ['z!', 'Z!']
 prefix = 'z!'
-motd = 'Newly made bot :D'
+motd = os.environ.get("MOTD")
 footer = 'Zeptagon'
 emcolor = 0x777777
 ercolor = 0xff0000
@@ -11,7 +11,7 @@ ercolor = 0xff0000
 def get_prefix(client,message):
     if not message.guild:
         return commands.when_mentioned_or('z!' or 'Z!')(client, message)
-    
+
     with open("./configs/prefixes.json", "r") as f:
         prefixes = json.load(f)
 
