@@ -17,7 +17,7 @@ class Math(commands.Cog):
         )
         emb.set_author(name='Calculator', icon_url=ctx.author.avatar_url)
         footerd(emb)
-        await ctx.channel.send(embed=emb)
+        await ctx.channel.send(mfmath.multiply(arg5, arg6, n1, n2))
 
     @commands.command(aliases=['math_divide', 'divide'])
     @commands.guild_only()
@@ -28,7 +28,7 @@ class Math(commands.Cog):
         )
         emb.set_author(name='Calculator', icon_url=ctx.author.avatar_url)
         footerd(emb)
-        await ctx.channel.send(embed=emb)
+        await ctx.channel.send(mfmath.divide(arg7, arg8, n1, n2))
 
     @commands.command(aliases=['math_add', 'add'])
     @commands.guild_only()
@@ -39,7 +39,7 @@ class Math(commands.Cog):
         )
         emb.set_author(name='Calculator', icon_url=ctx.author.avatar_url)
         footerd(emb)
-        await ctx.channel.send(embed=emb)
+        await ctx.channel.send(mfmath.add(arg9, arg10, n1, n2))
 
     @commands.command(aliases=['math_substract', 'substract'])
     @commands.guild_only()
@@ -50,7 +50,7 @@ class Math(commands.Cog):
         )
         emb.set_author(name='Calculator', icon_url=ctx.author.avatar_url)
         footerd(emb)
-        await ctx.channel.send(embed=emb)
+        await ctx.channel.send(mfmath.substract(arg11, arg12, n1, n2))
 
     @commands.command(aliases=['math_square', 'square'])
     @commands.guild_only()
@@ -61,7 +61,7 @@ class Math(commands.Cog):
         )
         emb.set_author(name='Calculator', icon_url=ctx.author.avatar_url)
         footerd(emb)
-        await ctx.channel.send(embed=emb)
+        await ctx.channel.send(mfmath.square(arg34_1, arg34_2))
 
 def setup(bot):
     bot.add_cog(Math(bot))
