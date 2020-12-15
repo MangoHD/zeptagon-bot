@@ -11,17 +11,17 @@ class PrefixCommand(commands.Cog):
         self.bot = bot
 
     @commands.command()
-    @commands.has_permissions(manage_server=True)
+    @commands.has_permissions(manage_guild=True)
     async def prefix(self, ctx, sett, prefix = None):
 
         if sett == 'set' or 'Set':
 
-            with open("prefixes.json", "r") as f:
+            with open("./config/prefixes.json", "r") as f:
                 prefixes = json.load(f)
 
             prefixes[str(ctx.guild.id)] = prefix
 
-            with open("prefixes.json", "w") as f:
+            with open("./config/prefixes.json", "w") as f:
                 json.dump(prefixes,f)
 
             e = discord.Embed(
@@ -32,6 +32,7 @@ class PrefixCommand(commands.Cog):
             footerd(e)
 
             await ctx.send(embed=e)
+
         elif sett == 'view' or 'list' or None:
             
             def gprefix():
