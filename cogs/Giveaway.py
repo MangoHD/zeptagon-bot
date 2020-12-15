@@ -156,13 +156,13 @@ class GiveawayCommands(commands.Cog):
                     msg2 = await channel.fetch_message(id_)
                 except:
                     pass
-            answers = []
-            def check2(message):
-                try:
-                    int(message.content)
-                    return True
-                except ValueError:
-                    return False
+            #answers = []
+            #def check2(message):
+            #    try:
+            #        int(message.content)
+            #        return True
+            #    except ValueError:
+            #        return False
             #await ctx.send(
             #    embed=discord.Embed(
             #        description=f'Are you sure to reroll [THIS](https://discordapp.com/channels/{ctx.guild.id}/{msg2.channel.id}/{id_}) giveaway? (`yes` or `no`)',
