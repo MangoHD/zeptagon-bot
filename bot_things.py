@@ -12,7 +12,7 @@ def get_prefix(client,message):
     if not message.guild:
         return commands.when_mentioned_or('z!' or 'Z!')(client, message)
     
-    with open("./config/prefixes.json", "r") as f:
+    with open("./configs/prefixes.json", "r") as f:
         prefixes = json.load(f)
 
     if str(message.guild.id) not in prefixes:

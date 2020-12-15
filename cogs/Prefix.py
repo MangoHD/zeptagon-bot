@@ -16,7 +16,7 @@ class PrefixCommand(commands.Cog):
 
         if sett == 'set' or 'Set':
 
-            with open("./config/prefixes.json", "r") as f:
+            with open("./configs/prefixes.json", "r") as f:
                 prefixes = json.load(f)
 
             prefixes[str(ctx.guild.id)] = prefix
@@ -36,7 +36,7 @@ class PrefixCommand(commands.Cog):
         elif sett == 'view' or 'list' or None:
             
             def gprefix():
-                with open("prefixes.json", "r") as f:
+                with open("./configs/prefixes.json", "r") as f:
                     prefixes = json.load(f)
 
                 if str(ctx.guild.id) not in prefixes:
