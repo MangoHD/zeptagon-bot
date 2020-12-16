@@ -31,7 +31,7 @@ class PrefixCommand(commands.Cog):
                     description='<:tickYes:787334378630938672> Successfully changed prefix to `{}`.'.format(prefix),
                     color=discord.Color.green()
                 )
-                e.set_author(name=ctx.author, icon_url=ctx.author.avatar_url)
+                #e.set_author(name=ctx.author, icon_url=ctx.author.avatar_url)
                 #footerd(e)
 
                 await ctx.send(embed=e)
@@ -44,7 +44,7 @@ class PrefixCommand(commands.Cog):
                 description='Current prefix is `' + prefixes.get(f"{str(ctx.guild.id)}") + '`.',
                 color=emcolor
             )
-            e.set_author(name=ctx.author, icon_url=ctx.author.avatar_url)
+            #e.set_author(name=ctx.author, icon_url=ctx.author.avatar_url)
             #footerd(e)
             await ctx.send(embed=e)
             

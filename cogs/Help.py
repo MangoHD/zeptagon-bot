@@ -5,18 +5,7 @@ import datetime
 import random
 import json
 from discord.ext import commands
-from bot_things import  motd, emcolor, ercolor, footerd, getprefix, get_prefix
-
-def prefix(message):
-    with open("./configs/prefixes.json", "r") as f:
-        prefixes = json.load(f)
-
-    if str(message.guild.id) not in prefixes:
-        return 'z!'
-
-    else:
-        prefix = prefixes[str(message.guild.id)]
-        return prefix
+from bot_things import  motd, emcolor, ercolor, footerd, getprefix, get_prefix, prefix
 
 class Help(commands.Cog):
     def __init__(self, bot):
