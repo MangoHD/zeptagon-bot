@@ -56,5 +56,13 @@ class Help(commands.Cog):
 
             await ctx.send(embed=e)
 
+        elif page == 'config':
+            e = discord.Embed(
+                title='Configuration Commands',
+                description=f'Current prefix is `{prefix(ctx.message)}`.\n\n'
+                f"`{prefix(ctx.message)}prefix <set|list> <prefix>` - Sets a custom prefix for your server.\n",
+                color=emcolor
+            )
+
 def setup(bot):
     bot.add_cog(Help(bot))

