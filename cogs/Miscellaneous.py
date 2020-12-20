@@ -46,7 +46,7 @@ class Miscellaneous(commands.Cog):
 
         total = 0
         for i in await ctx.guild.invites():
-            if i.inviter == ctx.author:
+            if i.inviter == user:
                 total += i.uses
 
         def thing(c: int):

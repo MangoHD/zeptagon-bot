@@ -28,3 +28,4 @@ def substract(arg11 : int, arg12 : int, n1 : int = '0', n2 : int = '0'):
 
 def square(arg34_1, arg34_2):
     return (f"{arg34_1} ^ {arg34_2} = {arg34_1 ** arg34_2}")
+

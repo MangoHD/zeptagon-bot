@@ -1,6 +1,7 @@
 import discord
 import os
 import asyncio
+import json
 from discord.ext import commands
 from bot_things import prefix, motd, emcolor, ercolor, footerd, getprefix, get_prefix
 
@@ -27,6 +28,16 @@ class Moderation(commands.Cog):
         try:
             await user.add_roles(role)
             await ctx.send(f"{ctx.author.mention}, given **{user.display_name}** the **{role.name}** role.")
+        except Exception as e:
+            await ctx.send(f'```{e}```')
+
+    @commands.command(pass_context=True, aliases=['remrole'])
+    @commands.guild_only()
+    @commands.has_permissions(manage_roles = True)
+    async def removerole(self, ctx, user: discord.Member, role: discord.Role):
+        try:
+            await user.remove_roles(role)
+            await ctx.send(f"{ctx.author.mention}, removed **{user.display_name}**'s **{role.name}** role.")
         except Exception as e:
             await ctx.send(f'```{e}```')
 
@@ -193,35 +204,51 @@ class Moderation(commands.Cog):
     @commands.command(pass_context = True)
     @commands.guild_only()
     @commands.has_guild_permissions(mute_members=True)
-    async def mute(self, ctx, member: discord.Member):
+    async def mute(self, ctx, member: discord.Member, *, how_long):
+        def convert(time):
+            pos = ['s', 'm', 'h', 'd']
+            time_dict = {'s': 1, 'm': 60, 'h': 3600, 'd': 86400}
+            unit = time[-1]
+            if unit not in pos:
+                return -1
+            try:
+                val = int(time[:-1])
+            except:
+                return -2
+            return val * time_dict[unit]
+        with open('./configs/muteroles.json', "r") as pp:
+            mconf = json.load(pp)
+        mtrole = discord.utils.get(member.guild.roles, id=int(mconf.get(ctx.guild.id)))
+        _thing = convert(how_long) / 3600
+        _hrs = int(_thing)
+        _mins = (_thing*60) % 60
+        _sec = (_thing*3600) % 60
+        dur = "%d hours %02d minutes %02d seconds" % (_hrs, _mins, _sec)
         try:
             try:
-                await member.add_roles(discord.utils.get(member.guild.roles, name='Muted'))
+                await member.add_roles(mtrole)
             except:
-                try:
-                    await member.add_roles(discord.utils.get(member.guild.roles, name='muted'))
-                except:
-                    await ctx.send(f"I can't find the `muterole`. You can either make a role named `Muted` or use the `{prefix}setup` command.")
-                    return
-            await ctx.send(f"I have muted **{member.name}**.\nResponsible Moderator: **{ctx.author}**")
-        except Exception as e:
-            await ctx.send(f"```{e}```")
+                await ctx.send(f"I can't find the `muterole`. You can either `{prefix(ctx.message)}muterole <@role>` or use the `{prefix(ctx.message)}setup` command.")
+            await ctx.send(f"I have muted **{member.name}**.\nDuration: {dur}")
+            await asyncio.sleep(convert(how_long))
+            await member.remove_roles(mtrole)
+        except Exception as _re:
+            await ctx.send(f"```{_re}```")
             #await ctx.send(f"I can't find the `muterole`. You can either make a role named `Muted` or use the `{prefix}setup` command.")
 
     @commands.command(pass_context=True)
     @commands.guild_only()
     @commands.has_guild_permissions(mute_members=True)
     async def unmute(self, ctx, member: discord.Member):
+        with open('./configs/muteroles.json', "r") as pp:
+            mconf = json.load(pp)
+        mtrole = discord.utils.get(member.guild.roles, id=int(mconf.get(ctx.guild.id)))
         try:
             try:
-                await member.remove_roles(discord.utils.get(member.guild.roles, name='Muted'))
+                await member.remove_roles(mtrole)
             except:
-                try:
-                    await member.remove_roles(discord.utils.get(member.guild.roles, name='muted'))
-                except:
-                    await ctx.send(f"User is not muted.")
-                    return
-            await ctx.send(f"I have unmuted **{member.name}**.\nResponsible Moderator: **{ctx.author}**")
+                return await ctx.send(f"User is not muted.")
+            await ctx.send(f"I have unmuted **{member.name}**.")
         except Exception as e:
             await ctx.send(f"```{e}```")
 
@@ -230,7 +257,12 @@ class Moderation(commands.Cog):
     @commands.has_guild_permissions(manage_guild=True)
     async def setup(self, ctx):
         prgrs = 0.0
-
+        def thingy(rol):            
+            with open('./configs/muteroles.json', "r") as p:
+                thing = json.load(p)
+            thing[str(ctx.guild.id)] = int(rol.id)
+            with open('./configs/muteroles.json', "w") as f:
+                json.dump(thing, f, indent=2)
         a = await ctx.send(f"Setting up things... (Progress: `{prgrs}%`)")
         await ctx.send(f"Finding `muterole`...")
         try:
@@ -261,11 +293,12 @@ class Moderation(commands.Cog):
                         await ctx.send(f"Permissions created for **{len(ctx.guild.channels)}** channels.")
                     except Exception as e:
                         await ctx.send(f"```{e}```")
-                    await ctx.send("Assigning the created muterole as the main muterole...")
+                    await ctx.send("Assigning the created muterole as the muterole in the database...")
+                    thingy(role)
                     await asyncio.sleep(0.2)
                     prgrs = 100.0
                     await a.edit(content=f"Set up things. (Progress: `{prgrs}%`)")
-                    await ctx.send("Saved! Setup finished. <:tick:769432064557842442>")
+                    return await ctx.send("Saved! Setup finished. <:tick:769432064557842442>")
                 except Exception as e:
                     await ctx.send(f"```{e}```")
         await asyncio.sleep(0.16)
@@ -280,7 +313,8 @@ class Moderation(commands.Cog):
             await ctx.send(f"Permissions created for **{len(ctx.guild.channels)}** channels.")
         except Exception as e:
             await ctx.send(f"```{e}```")
-        await ctx.send("Assigning the created muterole as the main muterole...")
+        await ctx.send("Assigning the created muterole as the muterole in the database...")
+        thingy(muterole)
         await asyncio.sleep(0.2)
         prgrs = 100.0
         await a.edit(content=f"Set up things. (Progress: `{prgrs}%`)")

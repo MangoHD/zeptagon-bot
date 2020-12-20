@@ -60,8 +60,10 @@ class Help(commands.Cog):
             e = discord.Embed(
                 title='Configuration Commands',
                 description=f'Current prefix is `{prefix(ctx.message)}`.\n\n'
-                f"`{prefix(ctx.message)}prefix <set|list> <prefix>` - Sets a custom prefix for your server.\n",
-                color=emcolor
+                f"`{prefix(ctx.message)}setprefix <prefix>` - Sets a custom prefix for your server.\n"
+                f"`{prefix(ctx.message)}muterole <@role>` - Sets the muterole for your server.\n",
+                color=emcolor,
+                timestamp=datetime.datetime.utcnow()
             )
 
 def setup(bot):

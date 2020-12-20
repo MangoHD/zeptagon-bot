@@ -100,21 +100,18 @@ async def presence():
         await zept.change_presence(status=discord.Status.online, activity=discord.Activity(type=discord.ActivityType.listening, name=f"{actualprefix}help | Zept"))
         await asyncio.sleep(7)
         await zept.change_presence(status=discord.Status.online, activity=discord.Activity(type=discord.ActivityType.watching, name=f"{len(zept.guilds)} servers | Zept"))
-        await asyncio.sleep(7)
+        await asyncio.sleep(3)
         await zept.change_presence(status=discord.Status.online, activity=discord.Game(name=f'{motd} | Zept'))
-        await asyncio.sleep(7)
+        await asyncio.sleep(3)
 
 zept.loop.create_task(presence())
 
-def setup(bot):
-    exts = ['ErrorHandler', 'Moderation', 'Giveaway', 'Snipe', 'Math', 'Configuration', 'Help', 'Miscellaneous']
+exts = ['ErrorHandler', 'Moderation', 'Giveaway', 'Snipe', 'Math', 'Configuration', 'Help', 'Miscellaneous']
 
-    if __name__ == "__main__":
-        for cog in exts:
-            bot.load_extension(f"cogs.{cog}")
-            print(f"Loaded {cog}")
-
-setup(zept)
+if __name__ == "__main__":
+    for cog in exts:
+        zept.load_extension(f"cogs.{cog}")
+        print(f"Loaded {cog}")
 
 # ======= COMMANDS PUT IN HERE ARE JUST COMMANDS THAT DON'T WORK IN COGS ======= #
 

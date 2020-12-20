@@ -15,6 +15,4 @@ def keep_alive():
     t.start()
 
 def thisthing():
-    print(""
-        "Unused"
-    )
+    print("Unused")

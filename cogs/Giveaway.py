@@ -111,6 +111,7 @@ class GiveawayCommands(commands.Cog):
         channel = self.bot.get_channel(c_id)
         
         end = datetime.datetime.utcnow() + datetime.timedelta(seconds=time)
+        #global prize
         prize = answers[2]
         if int(answers[3]) < 25:
             win_amount = int(answers[3])
@@ -121,6 +122,7 @@ class GiveawayCommands(commands.Cog):
             colour=discord.Color.blue(),
             timestamp=end)
         embed.set_footer(text="Ends at", icon_url='https://cdn.discordapp.com/avatars/785496485659148359/0fc85eb060bb37c35726fabe791170fe.webp?size=1024')
+        embed.set_author(name=str(prize))
         embed.add_field(name="_ _", value='Links: [Support Server](https://discord.gg/89eu5WD)・[Invite Me](https://discord.com/oauth2/authorize?client_id=785496485659148359&permissions=8&scope=bot)')
         msg = await channel.send("<:CH_present:767981864132018176> **GIVEAWAY** <:CH_present:767981864132018176>", embed=embed)
         await msg.add_reaction("🎉")
