@@ -65,6 +65,8 @@ class Help(commands.Cog):
                 color=emcolor,
                 timestamp=datetime.datetime.utcnow()
             )
+            footerd(e)
+            await ctx.send(embed=e)
 
 def setup(bot):
     bot.add_cog(Help(bot))

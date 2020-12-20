@@ -18,21 +18,21 @@ class Miscellaneous(commands.Cog):
         if user == 'self':
             user = ctx.author
 
-        thing = []
+        thing = 0
 
         try:
             for channel in ctx.guild.channels:
                 if channel.type == discord.ChannelType.text:
-                    async for thing2 in channel.history():
+                    async for thing2 in channel.history(limit=26000):
                         if thing2.author == user:
-                            thing.append(thing2.content)
+                            thing = thing + 1
                 else:
                     pass
         except Exception as er:
             print(er)
 
         e = discord.Embed(
-            description=f'{user.mention} has `{len(thing)}` total messages.',
+            description=f'{user.mention} has `{len(thing)}` total messages.\nNote: The counter only counts the last 25000 messages.',
             color=emcolor
         )
         footera(e)
@@ -98,29 +98,38 @@ class Miscellaneous(commands.Cog):
     async def userinfo(self, ctx, user: discord.Member = None):
         if user == None:
             user = ctx.author
-
         e = discord.Embed(
             title='User Info',
             color=emcolor
         )
-
+        if len(user.roles) > 1:
+            role_string = ' '.join([r.mention for r in user.roles][1:])
+        else:
+            role_string = 'No Roles'
+        perm_string = ', '.join([str(p[0]).replace("_", " ").title() for p in user.guild_permissions if p[1]])
         fields = [
             {'name': 'Username', 'value': f'{user}'},
             {'name': 'ID', 'value': str(user.id)},
             {'name': "Profile Picture", 'value': f'[Direct Link]({user.avatar_url})'},
             {'name': 'Top Role', 'value': user.top_role.mention},
-            {'name': "Roles", 'value': f'{len(user.roles)}'},
-            {'name': 'Join Position', 'value': str(sorted(ctx.guild.members, key=lambda m: m.joined_at).index(user) + 1)},
+            {'name': "Role Count", 'value': f'{len(user.roles)}'},
+            #{'name': "Roles", 'value': role_string},
+            #{'name': 'Join Position', 'value': str(sorted(ctx.guild.members, key=lambda m: m.joined_at).index(user) + 1)},
+            #{'name': "Permissions", 'value': perm_string},
             {'name': "Created At", 'value': user.created_at.strftime("%d/%m/%Y at %H:%M:%S UTC")},
             {'name': "Joined Server At", 'value': user.joined_at.strftime("%d/%m/%Y at %H:%M:%S UTC")}
         ]
         for field in fields:
             if field['value']:
-                e.add_field(name=field['name'], value=field['value'], inline=True)
-
+                try:
+                    e.add_field(name=field['name'], value=field['value'], inline=True)
+                except Exception as _er:
+                    await ctx.send("```{}```".format(_er))
+        e.add_field(name="Roles", value=role_string, inline=False)
+        e.add_field(name="Permissions", value=perm_string, inline=False)
+        e.set_thumbnail(url=user.avatar_url)
         e.set_author(name=f'{user}', icon_url=user.avatar_url)
         footerd(e)
-
         await ctx.send(embed=e)
 
     @commands.command(aliases=['fetch_user', 'fetchuser', 'fetchuserinfo'])
@@ -141,11 +150,7 @@ class Miscellaneous(commands.Cog):
             {'name': 'Username', 'value': f'{user}'},
             {'name': 'ID', 'value': str(user.id)},
             {'name': "Profile Picture", 'value': f'[Direct Link]({user.avatar_url})'},
-            {'name': 'Top Role', 'value': user.top_role.mention},
-            {'name': "Roles", 'value': f'{len(user.roles)}'},
-            {'name': 'Join Position', 'value': str(sorted(ctx.guild.members, key=lambda m: m.joined_at).index(user) + 1)},
-            {'name': "Created At", 'value': user.created_at.strftime("%d/%m/%Y at %H:%M:%S UTC")},
-            {'name': "Joined Server At", 'value': user.joined_at.strftime("%d/%m/%Y at %H:%M:%S UTC")}
+            {'name': "Created At", 'value': user.created_at.strftime("%d/%m/%Y at %H:%M:%S UTC")}
         ]
         for field in fields:
             if field['value']:

@@ -21,6 +21,32 @@ class Moderation(commands.Cog):
         except Exception as e:
             await ctx.send(f"```{e}```")
 
+    @commands.command(pass_context=True, aliases=['giveallroles'])
+    @commands.guild_only()
+    @commands.has_guild_permissions(manage_roles=True)
+    async def addallroles(self, ctx, role: discord.Role):
+        f = 0
+        for _member in ctx.guild.members:
+            try:
+                await _member.add_roles(role)
+                f = f + 1
+            except:
+                pass
+        await ctx.send("Success fully added roles to **{}** users.".format(f))
+
+    @commands.command(pass_context=True)
+    @commands.guild_only()
+    @commands.has_guild_permissions(manage_roles=True)
+    async def removeallroles(self, ctx, role: discord.Role):
+        f = 0
+        for _member in ctx.guild.members:
+            try:
+                await _member.remove_roles(role)
+                f = f + 1
+            except:
+                pass
+        await ctx.send("Success fully added roles to **{}** users.".format(f))
+
     @commands.command(pass_context=True, aliases=['addrole'])
     @commands.guild_only()
     @commands.has_permissions(manage_roles = True)
