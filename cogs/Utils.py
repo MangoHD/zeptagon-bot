@@ -36,8 +36,8 @@ class Utilities(commands.Cog):
     async def invite(self, ctx):
         embed = discord.Embed(
             title='Invite Zeptagon',
-            description="[All Perms Invite](https://discord.com/oauth2/authorize?client_id=755010248929968158&permissions=8&scope=bot)\n"
-                "[Recommended Invite](https://discord.com/oauth2/authorize?client_id=755010248929968158&permissions=700591158&scope=bot)\n"
+            description="[All Perms Invite](https://discord.com/oauth2/authorize?client_id=785496485659148359&permissions=8&scope=bot)\n"
+                "[Recommended Invite](https://discord.com/oauth2/authorize?client_id=785496485659148359&scope=bot&permissions=2113400023&response_type=code)\n"
                 "[Community Discord](https://discord.gg/TgKBwvszAB)"
                 "\n\nDeveloped by [mutefx#0001](http://bit.ly/sub2mango)",
             colour=emcolor)
