@@ -24,9 +24,9 @@ class Moderation(commands.Cog):
     @commands.command(pass_context=True, aliases=['giveallroles'])
     @commands.guild_only()
     @commands.has_guild_permissions(manage_roles=True)
-    async def addallroles(self, ctx, role: discord.Role):
+    async def addallroles(self, ctx, *, role: discord.Role):
         f = 0
-        for _member in ctx.guild.members:
+        async for _member in ctx.guild.fetch_members(limit=None):
             try:
                 await _member.add_roles(role)
                 f = f + 1
@@ -37,9 +37,9 @@ class Moderation(commands.Cog):
     @commands.command(pass_context=True)
     @commands.guild_only()
     @commands.has_guild_permissions(manage_roles=True)
-    async def removeallroles(self, ctx, role: discord.Role):
+    async def removeallroles(self, ctx, *, role: discord.Role):
         f = 0
-        for _member in ctx.guild.members:
+        async for _member in ctx.guild.fetch_members(limit=None):
             try:
                 await _member.remove_roles(role)
                 f = f + 1
@@ -50,7 +50,7 @@ class Moderation(commands.Cog):
     @commands.command(pass_context=True, aliases=['addrole'])
     @commands.guild_only()
     @commands.has_permissions(manage_roles = True)
-    async def giverole(self, ctx, user: discord.Member, role: discord.Role):
+    async def giverole(self, ctx, user: discord.Member, *, role: discord.Role):
         try:
             await user.add_roles(role)
             await ctx.send(f"{ctx.author.mention}, given **{user.display_name}** the **{role.name}** role.")
@@ -60,7 +60,7 @@ class Moderation(commands.Cog):
     @commands.command(pass_context=True, aliases=['remrole'])
     @commands.guild_only()
     @commands.has_permissions(manage_roles = True)
-    async def removerole(self, ctx, user: discord.Member, role: discord.Role):
+    async def removerole(self, ctx, user: discord.Member, *, role: discord.Role):
         try:
             await user.remove_roles(role)
             await ctx.send(f"{ctx.author.mention}, removed **{user.display_name}**'s **{role.name}** role.")
@@ -83,7 +83,7 @@ class Moderation(commands.Cog):
     @commands.command()
     @commands.guild_only()
     @commands.has_permissions(manage_channels=True)
-    async def nuke(self, ctx, channel: discord.TextChannel = None):
+    async def nuke(self, ctx, *, channel: discord.TextChannel = None):
         if channel == None:
             new_channel = await ctx.channel.clone()
             await ctx.channel.delete()
@@ -98,49 +98,16 @@ class Moderation(commands.Cog):
     @commands.guild_only()
     @commands.has_permissions(kick_members=True)
     async def kick_user(self, ctx, member: discord.Member, *, reason='No Reason Provided.'):
-        kickmessage = discord.Embed(
-            title="Kicked",
-            description=f"**{ctx.author.mention}** has kicked the user **{member}**.",
-            colour=emcolor
-        )
-
-        kickmessage.add_field(name='Reason:', value=reason, inline=False)
-        kickmessage.set_thumbnail(
-            url=ctx.author.avatar_url)
-        footerd(kickmessage)
-
-        kickdm = discord.Embed(
-            title='Kicked',
-            description=f"You have been kickned from **{ctx.author.guild}** by **{ctx.author.name}#"
-                        f"{ctx.author.discriminator}**.",
-            colour=emcolor
-        )
-
-        kickdm.add_field(name='Reason:', value=reason, inline=False)
-        kickdm.set_thumbnail(
-            url=ctx.author.avatar_url)
-        footerd(kickdm)
-
-        nokickperms = discord.Embed(
-            title="Invalid!",
-            description='Error: `No permissions to kick user. Try putting my role above the user\'s role`\n\n'
-                        '`Unable to kick user.`',
-            colour=emcolor
-        )
-
-        nokickperms.set_thumbnail(
-            url=ctx.author.avatar_url)
-        footerd(nokickperms)
-
         try:
             try:
                 #e = await member.send(embed=kickdm)
-                f = await member.send(f"You have been kicked from **{ctx.guild.name}**.\n\nResponsible Moderator: **{ctx.author}**")
+                f = await member.send(f"You have been kicked from **{ctx.guild.name}**.\nModerator: **{ctx.author}**")
+                thing = 'User notified with a DM'
             except:
-                pass
+                thing = 'User\'s DMs are closed.'
             await member.kick(reason=reason)
             #await ctx.channel.send(embed=kickmessage)
-            await ctx.send(f"I have kicked **{member}**.\nReason: **{reason}**\n\nResponsible Moderator: **{ctx.author}**")
+            await ctx.send(f"I have kicked **{member}**.\nReason: **{reason}** ({thing})")
         except Exception as e:
             #await ctx.send(embed=nokickperms)
             await ctx.send("```{}```".format(e))
@@ -150,47 +117,16 @@ class Moderation(commands.Cog):
     @commands.guild_only()
     @commands.has_permissions(ban_members=True)
     async def ban(self, ctx, member: discord.Member, *, reason='No Reason Provided.'):
-        banmessage = discord.Embed(
-            title="Banned",
-            description=f"**{ctx.author.name}#{ctx.author.discriminator}** has banned the user **{member.name}**.",
-            colour=emcolor
-        )
-
-        banmessage.add_field(name='Reason:', value=reason, inline=False)
-        banmessage.set_thumbnail(
-            url=ctx.author.avatar_url)
-        footerd(banmessage)
-
-        bandm = discord.Embed(
-            title='Banned',
-            description=f"You have been banned from **{ctx.author.guild}** by **{ctx.author.name}#"
-                        f"{ctx.author.discriminator}**.",
-            colour=emcolor
-        )
-
-        bandm.add_field(name='Reason:', value=reason, inline=False)
-        bandm.set_thumbnail(
-            url=ctx.author.avatar_url)
-        footerd(bandm)
-
-        nobanperms = discord.Embed(
-            title="Invalid!",
-            description='Error: `No permissions to ban user. Try putting my role above the user\'s role`\n\n'
-                        '`Unable to ban user.`',
-            colour=emcolor
-        )
-
-        nobanperms.set_thumbnail(url=ctx.author.avatar_url)
-        footerd(nobanperms)
         try:
             try:
                 #e = await member.send(embed=bandm)
-                e = await member.send(f"You have been banned from **{ctx.guild.name}**.\n\nResponsible Moderator: **{ctx.author}**")
+                e = await member.send(f"You have been banned from **{ctx.guild.name}**.\nModerator: **{ctx.author}**")
+                thing = 'User notified with a DM'
             except:
-                pass
+                thing = 'User\'s DMs are closed.'
             await member.ban(reason=reason)
             #await ctx.channel.send(embed=banmessage)
-            await ctx.send(f"I have banned **{ctx.author}**.\nReason: **{reason}**\n\nResponsible Moderator: **{ctx.author}**")
+            await ctx.send(f"I have banned **{ctx.author}**.\nReason: **{reason}** ({thing})")
         except:
             #await ctx.send(embed=nobanperms)
             await ctx.send("```{}```".format(e))
@@ -217,10 +153,10 @@ class Moderation(commands.Cog):
                             await ctx.send(f"```{e}```")
             else:
                 userid = int(member)
-                user = await discord.utils.get(discord.Member, id=userid)
+                user = await self.bot.fetch_user(userid)
                 try:
                     await ctx.guild.unban(user)
-                    await ctx.send(f"{ctx.author.mention}, I have unbanned **{user}**.\n\nResponsible Moderator: **{ctx.author}**")
+                    await ctx.send(f"{ctx.author.mention}, I have unbanned **{user}**.")
                     return
                 except Exception as e:
                     await ctx.send(f"```{e}```")
@@ -230,37 +166,59 @@ class Moderation(commands.Cog):
     @commands.command(pass_context = True)
     @commands.guild_only()
     @commands.has_guild_permissions(mute_members=True)
-    async def mute(self, ctx, member: discord.Member, *, how_long):
-        def convert(time):
-            pos = ['s', 'm', 'h', 'd']
-            time_dict = {'s': 1, 'm': 60, 'h': 3600, 'd': 86400}
-            unit = time[-1]
-            if unit not in pos:
-                return -1
-            try:
-                val = int(time[:-1])
-            except:
-                return -2
-            return val * time_dict[unit]
-        with open('./configs/muteroles.json', "r") as pp:
-            mconf = json.load(pp)
-        mtrole = discord.utils.get(member.guild.roles, id=int(mconf.get(ctx.guild.id)))
-        _thing = convert(how_long) / 3600
-        _hrs = int(_thing)
-        _mins = (_thing*60) % 60
-        _sec = (_thing*3600) % 60
-        dur = "%d hours %02d minutes %02d seconds" % (_hrs, _mins, _sec)
+    async def mute(self, ctx, member: discord.Member, *, how_long = None):
         try:
+            if how_long == None:
+                how_long = 999999
+                dur = 'Indefinitely'
+            else:
+                # def convert(time):
+                #     pos = ['s', 'm', 'h', 'd']
+                #     time_dict = {'s': 1, 'm': 60, 'h': 3600, 'd': 86400}
+                #     unit = time[-1]
+                #     if unit not in pos:
+                #         return -1
+                #     try:
+                #         val = int(time[:-1])
+                #     except:
+                #         return -2
+                #     return val * time_dict[unit]
+                # _thing = convert(how_long) / 3600
+                # _hrs = int(_thing)
+                # _mins = (_thing*60) % 60
+                # _sec = (_thing*3600) % 60
+                # dur = f"{_hrs} hours {_mins} minutes {_sec} seconds"
+                if how_long < 1:
+                    await ctx.send("Cannot be lower than 1 minute.")
+                elif how_long > 1079:
+                    await ctx.send("Cannot be longer than 7 days. (10080 minutes)")
+                else:
+                    try:
+                        how_long = int(how_long) * 60
+                        _thing = how_long / 60
+                        _hrs = int(how_long)
+                        _mins = (_thing*60) % 60
+                        _sec = (_thing*3600) % 60
+                        dur = f"{_hrs} hours {_mins} minutes {_sec} seconds"
+                    except:
+                        await ctx.send(f"Invalid Usage: `{how_long}` must be a number.\nUsage: `{prefix(ctx.message)}mute [@user] <minutes>`")
             try:
-                await member.add_roles(mtrole)
-            except:
-                await ctx.send(f"I can't find the `muterole`. You can either `{prefix(ctx.message)}muterole <@role>` or use the `{prefix(ctx.message)}setup` command.")
-            await ctx.send(f"I have muted **{member.name}**.\nDuration: {dur}")
-            await asyncio.sleep(convert(how_long))
-            await member.remove_roles(mtrole)
-        except Exception as _re:
-            await ctx.send(f"```{_re}```")
-            #await ctx.send(f"I can't find the `muterole`. You can either make a role named `Muted` or use the `{prefix}setup` command.")
+                try:
+                    with open('./configs/muteroles.json', "r") as pp:
+                        mconf = json.load(pp)
+                    mtrole = ctx.guild.get_role(mconf[f"{ctx.guild.id}"])
+                    await member.add_roles(mtrole)
+                except:
+                    await ctx.send(f"I can't find the `muterole`. You can either `{prefix(ctx.message)}muterole <@role>` or use the `{prefix(ctx.message)}setup` command.")
+                await ctx.send(f"I have muted **{member.name}**.\nDuration: {dur}")
+                await asyncio.sleep(how_long)
+                await member.remove_roles(mtrole)
+            except Exception as _re:
+                await ctx.send(f"```{_re}```")
+                #await ctx.send(f"I can't find the `muterole`. You can either make a role named `Muted` or use the `{prefix}setup` command.")
+        except Exception as _e:
+            await ctx.send("```{}```".format(_e))
+            print(_e)
 
     @commands.command(pass_context=True)
     @commands.guild_only()

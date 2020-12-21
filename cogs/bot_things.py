@@ -1,4 +1,4 @@
-import json, discord, os
+import json, discord, os, datetime
 from discord.ext import commands
 
 getprefix = ['z!', 'Z!']
@@ -31,6 +31,9 @@ def prefix(message):
     else:
         prefix = prefixes[str(message.guild.id)]
         return prefix
+
+class timei():
+    now = datetime.datetime.utcnow()
 
 def footerd(emb):
     emb.add_field(name='_ _', value='Links: [Support Server](https://discord.gg/TgKBwvszAB)・[Invite Me](https://discord.com/oauth2/authorize?client_id=785496485659148359&permissions=8&scope=bot)', inline=False)

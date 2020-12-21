@@ -4,7 +4,7 @@ import asyncio
 import datetime
 import random
 from discord.ext import commands
-from bot_things import prefix, motd, emcolor, ercolor, footerd, getprefix, get_prefix
+from bot_things import prefix, motd, emcolor, ercolor, footerd, footera, getprefix, get_prefix, timei
 
 class GiveawayCommands(commands.Cog):
     def __init__(self, bot):
@@ -117,16 +117,17 @@ class GiveawayCommands(commands.Cog):
             win_amount = int(answers[3])
         else:
             win_amount = 25
+        msg = await channel.send("<a:dicegif:786111161036701736>")
         embed = discord.Embed(
-            description=f"🏅 Winners: {answers[3]}\n⌛ Time Remaining: {answers[1]}\n🔰 Host: {ctx.author.mention}\nReact to 🎉 to enter the giveaway!",
+            description=f"🏅 Winners: {answers[3]}\n⌛ Time Remaining: {answers[1]}\n🔰 Host: {ctx.author.mention}\nReact to 🎉 to enter the giveaway!\n\nIf the giveaway does not end automatically,\nuse `{prefix(ctx.message)}gend {msg.id}`",
             colour=discord.Color.blue(),
             timestamp=end)
         embed.set_footer(text="Ends at", icon_url='https://cdn.discordapp.com/avatars/785496485659148359/0fc85eb060bb37c35726fabe791170fe.webp?size=1024')
-        embed.set_author(name=str(prize))
-        embed.add_field(name="_ _", value='Links: [Support Server](https://discord.gg/89eu5WD)・[Invite Me](https://discord.com/oauth2/authorize?client_id=785496485659148359&permissions=8&scope=bot)')
-        msg = await channel.send("<:CH_present:767981864132018176> **GIVEAWAY** <:CH_present:767981864132018176>", embed=embed)
+        embed.set_author(name=str(prize), icon_url="https://cdn.discordapp.com/attachments/743425064921464833/767981650070994984/86c9a4dde5bb348b53f2fb7ff099e9d5-square-wrapped-gift-box-by-vexels.png")
+        footerd(embed)
+        await msg.edit(content="<:present:767981864132018176> **GIVEAWAY** <:present:767981864132018176>", embed=embed)
         await msg.add_reaction("🎉")
-        gwmsg = await ctx.send(ctx.author.mention, embed=discord.Embed(description=f"<:tick:769432064557842442> Successfully started giveaway in {channel.mention}", color=discord.Color.green()))
+        await ctx.send(ctx.author.mention, embed=discord.Embed(description=f"<:tick:769432064557842442> Successfully started giveaway in {channel.mention}", color=discord.Color.green()))
         await asyncio.sleep(time)
         msg2 = await channel.fetch_message(msg.id)
         users = await msg2.reactions[0].users().flatten()
@@ -136,15 +137,14 @@ class GiveawayCommands(commands.Cog):
             i = i
             winners.append(random.choice(users).mention)
         embed2 = discord.Embed(
-            description=f"🔰 Host: {ctx.author.mention}\n🎟 Valid Entries: {len(users)}\n🏅 Winners: \n"+'\n'.join(winners)+"\n",
-            colour=emcolor,
-            timestamp=end)
-        embed2.set_author(name=prize, icon_url="https://cdn.discordapp.com/attachments/743425064921464833/767981650070994984/86c9a4dde5bb348b53f2fb7ff099e9d5-square-wrapped-gift-box-by-vexels.png")
-        embed2.add_field(name="_ _", value='Links: [Support Server](https://discord.gg/89eu5WD)・[Invite Me](https://discord.com/oauth2/authorize?client_id=785496485659148359&permissions=8&scope=bot)')
+            description=f"🔰 Host: {ctx.author.mention}\n🎟 Valid Entries: {len(users)}\n🏅 Winner(s): \n"+'\n'.join(winners)+"\n",
+            colour=0x777777,
+            timestamp=timei.now)
+        footerd(embed2)
         embed2.set_footer(text="Ended at", icon_url='https://cdn.discordapp.com/avatars/785496485659148359/0fc85eb060bb37c35726fabe791170fe.webp?size=1024')
-        if gwmsg.content != "<:CH_present:767981864132018176> **GIVEAWAY ENDED** <:CH_present:767981864132018176>":
+        if msg.content != "<:CH_present:767981864132018176> **GIVEAWAY ENDED** <:CH_present:767981864132018176>":
             await channel.send(f"🎊 **Congratulations** {', '.join(winners)}! You have won **{prize}**!")
-            await msg.edit(content="<:CH_present:767981864132018176> **GIVEAWAY ENDED** <:CH_present:767981864132018176>", embed=embed2)
+            await msg.edit(content="<:present:767981864132018176> **GIVEAWAY ENDED** <:present:767981864132018176>", embed=embed2)
         else:
             pass
 
@@ -153,79 +153,87 @@ class GiveawayCommands(commands.Cog):
     @commands.has_permissions(manage_messages=True)
     async def reroll_giveaway(self, ctx, id_: int):
         try:
-            for channel in ctx.guild.channels:
+            for channel in ctx.guild.text_channels:
                 try:
-                    msg2 = await channel.fetch_message(id_)
+                    msg2 = await channel.fetch_message(int(id_))
                 except:
                     pass
-            #answers = []
-            #def check2(message):
-            #    try:
-            #        int(message.content)
-            #        return True
-            #    except ValueError:
-            #        return False
-            #await ctx.send(
-            #    embed=discord.Embed(
-            #        description=f'Are you sure to reroll [THIS](https://discordapp.com/channels/{ctx.guild.id}/{msg2.channel.id}/{id_}) giveaway? (`yes` or `no`)',
-            #        color=emcolor
-            #    ).set_author(
-            #        name='Reroll Giveaway'
-            #    )
-            #)
-            #try:
-            #    msg = await self.bot.wait_for('message', timeout=45.0, check=check2)
-            #except asyncio.TimeoutError:
-            #    await ctx.channel.send(embed=discord.Embed(
-            #        title='Error',
-            #        description=f'You did not answered fast enough. Try again by typing `{prefix}greroll`',
-            #        color=emcolor))
-            #    return
-            #else:
-            #    answers.append(msg.content)
-            #if answers[0] == 'yes':
-            users = await msg2.reactions[0].users().flatten()
-            users.pop(users.index(self.bot.user))
-            winner = random.choice(users)
-            await msg2.channel.send(f"🎊 **Congratulations** {winner.mention}! You are the new winner!")
-            emb = discord.Embed(
-                description=f"<:tick:769432064557842442> Successfully re-rolled giveaway in {msg2.channel.mention}",
-                color=discord.Color.green()
-            )
-            await ctx.send(embed=emb)
-                    
-            #elif answers[0] == 'no':
-            #    await ctx.send( embed=discord.Embed(description='<:tickNo:787334378639458344> Command Cancelled.', color=discord.Color.red()))
-            #    return
-            #else:
-            #    await ctx.send(embed=discord.Embed(description='<:tickNo:787334378639458344> Invalid answer. Command Cancelled.', color=discord.Color.red()))
-        except Exception as er:
-            await ctx.send(f'```{er}```')
+        except:
+            await ctx.send(embed=discord.Embed(description = "<:tickNo:787334378639458344> Error: ID was entered incorrectly.", color=discord.Color.red()))
+        #answers = []
+        #def check2(message):
+        #    try:
+        #        int(message.content)
+        #        return True
+        #    except ValueError:
+        #        return False
+        #await ctx.send(
+        #    embed=discord.Embed(
+        #        description=f'Are you sure to reroll [THIS](https://discordapp.com/channels/{ctx.guild.id}/{msg2.channel.id}/{id_}) giveaway? (`yes` or `no`)',
+        #        color=emcolor
+        #    ).set_author(
+        #        name='Reroll Giveaway'
+        #    )
+        #)
+        #try:
+        #    msg = await self.bot.wait_for('message', timeout=45.0, check=check2)
+        #except asyncio.TimeoutError:
+        #    await ctx.channel.send(embed=discord.Embed(
+        #        title='Error',
+        #        description=f'You did not answered fast enough. Try again by typing `{prefix}greroll`',
+        #        color=emcolor))
+        #    return
+        #else:
+        #    answers.append(msg.content)
+        #if answers[0] == 'yes':
+        users = await msg2.reactions[0].users().flatten()
+        users.pop(users.index(self.bot.user))
+        winner = random.choice(users)
+        await msg2.channel.send(f"🎊 **Congratulations** {winner.mention}! You are the new winner!")
+        emb = discord.Embed(
+            description=f"<:tick:769432064557842442> Successfully re-rolled giveaway in {msg2.channel.mention}",
+            color=discord.Color.green()
+        )
+        await ctx.send(embed=emb)
+                
+        #elif answers[0] == 'no':
+        #    await ctx.send( embed=discord.Embed(description='<:tickNo:787334378639458344> Command Cancelled.', color=discord.Color.red()))
+        #    return
+        #else:
+        #    await ctx.send(embed=discord.Embed(description='<:tickNo:787334378639458344> Invalid answer. Command Cancelled.', color=discord.Color.red()))
 
     @commands.command(aliases=['gend'])
     @commands.guild_only()
     @commands.has_permissions(manage_messages=True)
     async def end_giveaway(self, ctx, id_: int):
         try:
-            for channel in ctx.guild.channels:
+            for channel in ctx.guild.text_channels:
                 try:
-                    msg2 = await channel.fetch_message(id_)
+                    msg2 = await channel.fetch_message(int(id_))
                 except:
-                    await ctx.channel.send("**Error:** ID was entered incorrectly.")
-                    return
+                    pass
         except:
-            pass
+            await ctx.send(embed=discord.Embed(description = "<:tickNo:787334378639458344> Error: ID was entered incorrectly.", color=discord.Color.red()))
         users = await msg2.reactions[0].users().flatten()
         users.pop(users.index(self.bot.user))
         winner = random.choice(users)
-        if msg2.content != "<:CH_present:767981864132018176> **GIVEAWAY ENDED** <:CH_present:767981864132018176>":
+        if msg2.content == "<:CH_present:767981864132018176> **GIVEAWAY ENDED** <:CH_present:767981864132018176>":
+            await ctx.send(embed=discord.Embed(description = "<:tickNo:787334378639458344> Error: The giveaway was already ended.", color=discord.Color.red()))
+        else:
             await msg2.channel.send(f"🎊 **Congratulations** {winner.mention}! You have won the giveaway!")
+            users = await msg2.reactions[0].users().flatten()
+            users.pop(users.index(self.bot.user))
             emb = discord.Embed(
                 description=f"<:tick:769432064557842442> Successfully ended giveaway in {msg2.channel.mention}",
                 color=discord.Color.green())
+            embed2 = discord.Embed(
+                description=f"🔰 Host: {ctx.author.mention}\n🎟 Valid Entries: {len(users)}\n🏅 Winner: \n"+winner.mention+"\n",
+                colour=0x777777,
+                timestamp=timei.now)
+            footerd(embed2)
+            embed2.set_footer(text="Ended at", icon_url='https://cdn.discordapp.com/avatars/785496485659148359/0fc85eb060bb37c35726fabe791170fe.webp?size=1024')
+            await msg2.edit(content="<:CH_present:767981864132018176> **GIVEAWAY ENDED** <:CH_present:767981864132018176>", embed=embed2)
             await ctx.send(embed=emb)
-        else:
-            await ctx.send(embed=discord.Embed(description = "<:tickNo:787334378639458344> Error: The giveaway was already ended.", color=discord.Color.red()))
 
 def setup(bot):
     bot.add_cog(GiveawayCommands(bot))

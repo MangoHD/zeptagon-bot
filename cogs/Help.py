@@ -56,12 +56,109 @@ class Help(commands.Cog):
 
             await ctx.send(embed=e)
 
+        elif page == 'utils':
+            e = discord.Embed(
+                title='Utility Commands',
+                description=f'Current prefix is `{prefix(ctx.message)}`.\n\n'
+                f"`{prefix(ctx.message)}ping` - Checks the bot's ping.\n"
+                f"`{prefix(ctx.message)}pingweb [website]` - Pings a website and checks the status.\n"
+                f"`{prefix(ctx.message)}invite` - Invite link for the bot.\n",
+                color=emcolor,
+                timestamp=datetime.datetime.utcnow()
+            )
+            footerd(e)
+            await ctx.send(embed=e)
+
         elif page == 'config':
             e = discord.Embed(
                 title='Configuration Commands',
                 description=f'Current prefix is `{prefix(ctx.message)}`.\n\n'
                 f"`{prefix(ctx.message)}setprefix <prefix>` - Sets a custom prefix for your server.\n"
                 f"`{prefix(ctx.message)}muterole <@role>` - Sets the muterole for your server.\n",
+                color=emcolor,
+                timestamp=datetime.datetime.utcnow()
+            )
+            footerd(e)
+            await ctx.send(embed=e)
+
+        elif page == 'math':
+            e = discord.Embed(
+                title='Math Commands',
+                description=f'Current prefix is `{prefix(ctx.message)}`.\n\n'
+                f"`{prefix(ctx.message)}randomnum [min] [max]` - Picks a random number between the minimum and maximum\n"
+                f"`{prefix(ctx.message)}add [num] [num]` - Adds the given numbers.\n"
+                f"`{prefix(ctx.message)}substract [num] [num]` - Substracts the given numbers.\n"
+                f"`{prefix(ctx.message)}multiply [num] [num]` - Multiplies the given numbers.\n"
+                f"`{prefix(ctx.message)}divide [num] [num]` - Divides the given numbers.\n",
+                color=emcolor,
+                timestamp=datetime.datetime.utcnow()
+            )
+            footerd(e)
+            await ctx.send(embed=e)
+        
+        elif page == 'image':
+            e = discord.Embed(
+                title='Image Commands',
+                description=f'Current prefix is `{prefix(ctx.message)}`.\n\n'
+                f"`{prefix(ctx.message)}meme` - Sends a random reddit meme.\n"
+                f"`{prefix(ctx.message)}ytcomment [comment]` - Makes a youtube comment.\n"
+                f"`{prefix(ctx.message)}tweet [msg]` - Makes a tweet.\n"
+                # f"`{prefix(ctx.message)}wanted <@user>` - Adds a wanted overlay to someone.\n"
+                # f"`{prefix(ctx.message)}triggered <@user>` - Adds a triggered overlay to someone.\n"
+                f"`{prefix(ctx.message)}gay` - Rainbow overlay over someone.\n"
+                f"`{prefix(ctx.message)}fox` - Random Fox Image.\n"
+                f"`{prefix(ctx.message)}cat` - Random Cat Image.\n"
+                f"`{prefix(ctx.message)}panda` - Random Panda Image.\n"
+                f"`{prefix(ctx.message)}dog` - Random Dog Image.\n"
+                f"`{prefix(ctx.message)}koala` - Random Koala Image.\n"
+                f"`{prefix(ctx.message)}bird` - Random Bird Image.\n",
+                color=emcolor,
+                timestamp=datetime.datetime.utcnow()
+            )
+            footerd(e)
+            await ctx.send(embed=e)
+
+        elif page == 'misc':
+            e = discord.Embed(
+                title='Miscellaneous Commands',
+                description=f'Current prefix is `{prefix(ctx.message)}`.\n\n'
+                f"`{prefix(ctx.message)}poll [options..]` - Creates a poll with the given questions.\n"
+                f"`{prefix(ctx.message)}serverinfo` - Statistics for the current server.\n"
+                f"`{prefix(ctx.message)}whois <user>` - Information for a user.\n"
+                f"`{prefix(ctx.message)}messages <user>` - Checks amount of messages a user sent. (bugged)\n"
+                f"`{prefix(ctx.message)}invites <user>` - Checks how many people were invited by a user.\n"
+                f"`{prefix(ctx.message)}avatar <user>` - A user's avatar.\n"
+                f"`{prefix(ctx.message)}fetchav [id]` - Fetches an avatar from a user that is not in the server.\n"
+                f"`{prefix(ctx.message)}fetchuser [id]` - Fetches basic information for a user that is not in the server.\n",
+                color=emcolor,
+                timestamp=datetime.datetime.utcnow()
+            )
+            footerd(e)
+            await ctx.send(embed=e)
+
+        elif page == 'fun':
+            e = discord.Embed(
+                title='Fun Commands',
+                description=f'Current prefix is `{prefix(ctx.message)}`.\n\n'
+                f"`{prefix(ctx.message)}8ball [question]` - Magic 8Ball.\n"
+                f"`{prefix(ctx.message)}gifsearch [query]` - Finds the gif online.\n"
+                f"`{prefix(ctx.message)}imgsearch [query]` - Finds an image online.\n"
+                f"`{prefix(ctx.message)}encode [text]` - Encodes a message to Base64.\n"
+                f"`{prefix(ctx.message)}decode [text]` - Decodes a message from Base64.\n"
+                f"`{prefix(ctx.message)}spacetext [text]` - Adds spaces between letters.\n"
+                f"`{prefix(ctx.message)}ascii [text]` - Makes a large text.\n"
+                f"`{prefix(ctx.message)}regional [text]` - Makes a text in regional indicator font.\n"
+                f"`{prefix(ctx.message)}hack <user>` - Hacks a user. (fake)\n"
+                f"`{prefix(ctx.message)}findip <user>` - Finds a user's IP (fake)\n"
+                f"`{prefix(ctx.message)}clap [text]` - Adds claps between words.\n"
+                f"`{prefix(ctx.message)}1337 [text]` - 1337 speak.\n"
+                f"`{prefix(ctx.message)}embed [query]` - Makes an embed with given queries.\n"
+                f"`{prefix(ctx.message)}unfunny` - Tells someone how unfunny they are.\n"
+                f"`{prefix(ctx.message)}dice` - Rolls a virtual dice\n"
+                f"`{prefix(ctx.message)}flipcoin` - Flips a virtual coin.\n"
+                f"`{prefix(ctx.message)}iq <user>` - How smart a user is.\n"
+                f"`{prefix(ctx.message)}howgay <user>` - How gay someone is.\n"
+                f"`{prefix(ctx.message)}howsimp <user>` - How much of a simp someone is.\n",
                 color=emcolor,
                 timestamp=datetime.datetime.utcnow()
             )

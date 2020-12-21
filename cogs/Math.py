@@ -1,5 +1,6 @@
 import discord
 import os
+import random
 import dyv_math as mfmath
 from discord.ext import commands
 from bot_things import prefix, motd, emcolor, ercolor, footerd, getprefix, get_prefix
@@ -7,6 +8,17 @@ from bot_things import prefix, motd, emcolor, ercolor, footerd, getprefix, get_p
 class Math(commands.Cog):
     def __init__(self, bot):
         self.bot = bot
+
+    @commands.command(aliases=['randomnumber','random_number','randomnum'])
+    @commands.guild_only()
+    async def randnum(self, ctx, min : int, max : int):
+        var32_1 = discord.Embed(
+            title='Random Number Generator!',
+            description=f'Requested by {ctx.author.mention}\n\nMinimum = `{min}`\nMaximum = `{max}`\n\nRandom Number is: `{random.randint(min, max)}`',
+            colour=emcolor
+        )
+        footerd(var32_1)
+        await ctx.channel.send("", embed=var32_1)
 
     @commands.command(aliases=['math_multiply', 'multiply'])
     @commands.guild_only()
