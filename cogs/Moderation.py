@@ -21,6 +21,11 @@ class Moderation(commands.Cog):
         except Exception as e:
             await ctx.send(f"```{e}```")
 
+    @setdelay.error
+    async def setdelay_err(self, ctx, error):
+        if isinstance(error, commands.BadArgument):
+            await ctx.send("Channel not found.")
+
     @commands.command(pass_context=True, aliases=['giveallroles'])
     @commands.guild_only()
     @commands.has_guild_permissions(manage_roles=True)
@@ -33,6 +38,11 @@ class Moderation(commands.Cog):
             except:
                 pass
         await ctx.send("Success fully added roles to **{}** users.".format(f))
+
+    @addallroles.error
+    async def addallroles_err(self, ctx, error):
+        if isinstance(error, commands.BadArgument):
+            await ctx.send("Role not found.")
 
     @commands.command(pass_context=True)
     @commands.guild_only()
@@ -47,6 +57,11 @@ class Moderation(commands.Cog):
                 pass
         await ctx.send("Success fully added roles to **{}** users.".format(f))
 
+    @removeallroles.error
+    async def removeallroles_err(self, ctx, error):
+        if isinstance(error, commands.BadArgument):
+            await ctx.send("Role not found.")
+
     @commands.command(pass_context=True, aliases=['addrole'])
     @commands.guild_only()
     @commands.has_permissions(manage_roles = True)
@@ -57,6 +72,11 @@ class Moderation(commands.Cog):
         except Exception as e:
             await ctx.send(f'```{e}```')
 
+    @giverole.error
+    async def giverl_err(self, ctx, error):
+        if isinstance(error, commands.BadArgument):
+            await ctx.send(f"Either user or role is not found.\nUsage: `{prefix(ctx.message)}giverole [user] [role]`")
+
     @commands.command(pass_context=True, aliases=['remrole'])
     @commands.guild_only()
     @commands.has_permissions(manage_roles = True)
@@ -66,6 +86,11 @@ class Moderation(commands.Cog):
             await ctx.send(f"{ctx.author.mention}, removed **{user.display_name}**'s **{role.name}** role.")
         except Exception as e:
             await ctx.send(f'```{e}```')
+
+    @removerole.error
+    async def remvrl_err(self, ctx, error):
+        if isinstance(error, commands.BadArgument):
+            await ctx.send(f"Either user or role is not found.\nUsage: `{prefix(ctx.message)}removerole [user] [role]`")
 
     @commands.command(aliases=['clear'])
     @commands.guild_only()
@@ -101,17 +126,22 @@ class Moderation(commands.Cog):
         try:
             try:
                 #e = await member.send(embed=kickdm)
-                f = await member.send(f"You have been kicked from **{ctx.guild.name}**.\nModerator: **{ctx.author}**")
+                f = await member.send(f"You have been kicked from **{ctx.guild.name}**.\nReason: `{reason}`\nModerator: **{ctx.author}**")
                 thing = 'User notified with a DM'
             except:
                 thing = 'User\'s DMs are closed.'
             await member.kick(reason=reason)
             #await ctx.channel.send(embed=kickmessage)
-            await ctx.send(f"I have kicked **{member}**.\nReason: **{reason}** ({thing})")
+            await ctx.send(f"I have kicked **{member}**. ({thing})\nReason: `{reason}`")
         except Exception as e:
             #await ctx.send(embed=nokickperms)
             await ctx.send("```{}```".format(e))
             await f.delete()
+
+    @kick_user.error
+    async def kick_err(self, ctx, error):
+        if isinstance(error, commands.BadArgument):
+            await ctx.send(f"User not found.")
 
     @commands.command()
     @commands.guild_only()
@@ -120,17 +150,22 @@ class Moderation(commands.Cog):
         try:
             try:
                 #e = await member.send(embed=bandm)
-                e = await member.send(f"You have been banned from **{ctx.guild.name}**.\nModerator: **{ctx.author}**")
+                e = await member.send(f"You have been banned from **{ctx.guild.name}**.\nReason: `{reason}`\nModerator: **{ctx.author}**")
                 thing = 'User notified with a DM'
             except:
                 thing = 'User\'s DMs are closed.'
             await member.ban(reason=reason)
             #await ctx.channel.send(embed=banmessage)
-            await ctx.send(f"I have banned **{ctx.author}**.\nReason: **{reason}** ({thing})")
+            await ctx.send(f"I have banned **{ctx.author}**. ({thing})\nReason: `{reason}`")
         except:
             #await ctx.send(embed=nobanperms)
             await ctx.send("```{}```".format(e))
             await e.delete()
+
+    @ban.error
+    async def ban_err(self, ctx, error):
+        if isinstance(error, commands.BadArgument):
+            await ctx.send(f"User not found.")
 
     @commands.command()
     @commands.guild_only()
@@ -163,6 +198,11 @@ class Moderation(commands.Cog):
         except Exception as e:
             await ctx.send("```{}```".format(e))
 
+    @unban.error
+    async def unb_err(self, ctx, error):
+        if isinstance(error, commands.BadArgument):
+            await ctx.send(f"User not found.\nExample Usage: `{prefix(ctx.message)}unban mutefx#0001`")
+
     @commands.command(pass_context = True)
     @commands.guild_only()
     @commands.has_guild_permissions(mute_members=True)
@@ -194,12 +234,10 @@ class Moderation(commands.Cog):
                     await ctx.send("Cannot be longer than 7 days. (10080 minutes)")
                 else:
                     try:
-                        how_long = int(how_long) * 60
-                        _thing = how_long / 60
+                        _thing = how_long
                         _hrs = int(how_long)
                         _mins = (_thing*60) % 60
-                        _sec = (_thing*3600) % 60
-                        dur = f"{_hrs} hours {_mins} minutes {_sec} seconds"
+                        dur = f"{_hrs} hours {_mins} minutes"
                     except:
                         await ctx.send(f"Invalid Usage: `{how_long}` must be a number.\nUsage: `{prefix(ctx.message)}mute [@user] <minutes>`")
             try:
@@ -220,13 +258,18 @@ class Moderation(commands.Cog):
             await ctx.send("```{}```".format(_e))
             print(_e)
 
+    @mute.error
+    async def mte_err(self, ctx, error):
+        if isinstance(error, commands.BadArgument):
+            await ctx.send(f"User not found.\nUsage: `{prefix(ctx.message)}mute [user] <minutes>`")
+
     @commands.command(pass_context=True)
     @commands.guild_only()
     @commands.has_guild_permissions(mute_members=True)
     async def unmute(self, ctx, member: discord.Member):
         with open('./configs/muteroles.json', "r") as pp:
             mconf = json.load(pp)
-        mtrole = discord.utils.get(member.guild.roles, id=int(mconf.get(ctx.guild.id)))
+        mtrole = ctx.guild.get_role(mconf[f"{ctx.guild.id}"])
         try:
             try:
                 await member.remove_roles(mtrole)
@@ -235,6 +278,11 @@ class Moderation(commands.Cog):
             await ctx.send(f"I have unmuted **{member.name}**.")
         except Exception as e:
             await ctx.send(f"```{e}```")
+
+    @unmute.error
+    async def unm_err(self, ctx, error):
+        if isinstance(error, commands.BadArgument):
+            await ctx.send(f"User not found.")
 
     @commands.command(pass_context=True)
     @commands.guild_only()

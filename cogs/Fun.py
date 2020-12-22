@@ -8,9 +8,12 @@ import discord
 import aiohttp
 import requests
 import pyfiglet
-from bs4 import BeautifulSoup as bs4
+
+from discord import Embed
 from discord.ext import commands
-from bot_things import motd, emcolor, ercolor, footerd, getprefix, get_prefix, prefix, footera
+from bs4 import BeautifulSoup as bs4
+from bot_things import motd, emcolor, ercolor
+from bot_things import footerd, getprefix, get_prefix, prefix, footera, timei
 
 regionals = {
     'a': '\N{REGIONAL INDICATOR SYMBOL LETTER A}', 'b': '\N{REGIONAL INDICATOR SYMBOL LETTER B}',
@@ -55,6 +58,11 @@ class FunCommands(commands.Cog):
             args = ctx.author
         await ctx.send(f"**{args.name}** is {random.randint(1,100)}% gay.")
 
+    @howgay.error
+    async def howgay_err(self, ctx, error):
+        if isinstance(error, commands.BadArgument):
+            await ctx.send("User not found.")
+
     @commands.command(aliases=['simprate'])
     @commands.guild_only()
     async def howsimp(self, ctx, *, args : discord.Member = None):
@@ -62,69 +70,78 @@ class FunCommands(commands.Cog):
             args = ctx.author
         await ctx.send(f"**{args.name}** is {random.randint(1,100)}% a simp.")
 
+    @howsimp.error
+    async def howsimp_err(self, ctx, error):
+        if isinstance(error, commands.BadArgument):
+            await ctx.send("User not found.")
+
     @commands.command()
     @commands.guild_only()
-    async def choice(self, ctx, *, args):
-        a = args.split('|')
-        b = ', '.join(a)
-        embed=discord.Embed(
-            title='Random Choice',
-            description=f'\n**Choices:**\n{b}\n\n**Picked:**\n{random.choice(a)}',
-            color=emcolor)
-        footerd(embed)
-        await ctx.send(embed=embed)
+    async def choice(self, ctx, *, args = None):
+        if args == None:
+            return await ctx.send(f"You need to provide something to .\nUsage: `{prefix(ctx.message)} [text]`")
+        else:
+            a = args.split('|')
+            b = ', '.join(a)
+            embed=discord.Embed(
+                title='Random Choice',
+                description=f'\n**Choices:**\n{b}\n\n**Picked:**\n{random.choice(a)}',
+                color=emcolor)
+            footerd(embed)
+            await ctx.send(embed=embed)
 
     @commands.command(aliases=['8ball'])
     @commands.guild_only()
-    async def eight_ball_answr(self, ctx, *, question):
-        answers = [
-            'Possibly.',
-            'Ask Again Later...',
-            'Try Again.',
-            'It\'s Certain.',
-            'Most Likely No',
-            'Most Likely Yes',
-            'No.',
-            'Yes.',
-            'Definetly a Yes.',
-            'Definetly a No.',
-            'What did you expected?',
-            'Cannot answer now, try again.',
-            "It is certain",
-            "It is decidedly so",
-            "Without a doubt",
-            "Yes, definitely",
-            "You may rely on it",
-            "As I see it, yes",
-            "Most likely",
-            "Outlook good",
-            "Yes",
-            "Signs point to yes",
-            "Reply hazy try again",
-            "Ask again later",
-            "Better not tell you now",
-            "Cannot predict now",
-            "Concentrate and ask again",
-            "Don't count on it",
-            "My reply is no",
-            "My sources say no",
-            "Outlook not so good",
-            "Very doubtful"
-        ]
-        embed = discord.Embed(
-            title='8ball',
-            description=f"\n\n**Question Asked:**\n{question}\n\n**Answer:**\n*{random.choice(answers)}*",
-            colour=emcolor)
-        footerd(embed)
-        await ctx.send(embed=embed)
+    async def eight_ball_answr(self, ctx, *, question = None):
+        if question == None:
+            return await ctx.send(f"You need to provide something to .\nUsage: `{prefix(ctx.message)} [text]`")
+        else:
+            answers = [
+                'Possibly.',
+                'Ask Again Later...',
+                'Try Again.',
+                'It\'s Certain.',
+                'Most Likely No',
+                'Most Likely Yes',
+                'No.',
+                'Yes.',
+                'Definetly a Yes.',
+                'Definetly a No.',
+                'What did you expected?',
+                'Cannot answer now, try again.',
+                "It is certain",
+                "It is decidedly so",
+                "Without a doubt",
+                "Yes, definitely",
+                "You may rely on it",
+                "As I see it, yes",
+                "Most likely",
+                "Outlook good",
+                "Yes",
+                "Signs point to yes",
+                "Reply hazy try again",
+                "Ask again later",
+                "Better not tell you now",
+                "Cannot predict now",
+                "Concentrate and ask again",
+                "Don't count on it",
+                "My reply is no",
+                "My sources say no",
+                "Outlook not so good",
+                "Very doubtful"
+            ]
+            embed = discord.Embed(
+                title='8ball',
+                description=f"\n\n**Question Asked:**\n{question}\n\n**Answer:**\n*{random.choice(answers)}*",
+                colour=emcolor)
+            footerd(embed)
+            await ctx.send(embed=embed)
 
     @commands.command()
     @commands.guild_only()
     async def gifsearch(self, ctx, query=None):
-        if query is None:
-            r = requests.get("https://api.giphy.com/v1/gifs/random?api_key=ldQeNHnpL3WcCxJE1uO8HTk17ICn8i34&tag=&rating=R")
-            res = r.json()
-            await ctx.send(res['data']['url'])
+        if query == None:
+            return await ctx.send(f"You need to provide a gif name to search.\nUsage: `{prefix(ctx.message)}gifsearch [query]`")
         else:
             r = requests.get(
                 f"https://api.giphy.com/v1/gifs/search?api_key=ldQeNHnpL3WcCxJE1uO8HTk17ICn8i34&q={query}&limit=1&offset=0&rating=R&lang=en")
@@ -133,75 +150,96 @@ class FunCommands(commands.Cog):
 
     @commands.command(aliases=["searchimg", "searchimage", "imagesearch", "imgsearch"])
     @commands.guild_only()
-    async def image(self, ctx, *, args):
-        url = 'https://unsplash.com/search/photos/' + args.replace(" ", "%20")
-        page = requests.get(url)
-        soup = bs4(page.text, 'html.parser')
-        image_tags = soup.findAll('img')
-        if str(image_tags[2]['src']).find("https://trkn.us/pixel/imp/c="):
-            link = image_tags[2]['src']
-            try:
-                async with aiohttp.ClientSession() as session:
-                    async with session.get(link) as resp:
-                        image = await resp.read()
-                with io.BytesIO(image) as file:
-                    await ctx.send(f"Search result for: **{args}**", file=discord.File(file, f"{ctx.message.id}.png"))
-            except:
-                await ctx.send(f'' + link + f"\nSearch result for: **{args}** ")
+    async def image(self, ctx, *, args = None):
+        if args == None:
+            return await ctx.send(f"You need to provide an image to search.\nUsage: `{prefix(ctx.message)}imgsearch [query]`")
         else:
-            await ctx.send("Nothing found for **" + args + "**")
-
-    @commands.command()
-    @commands.guild_only()
-    async def encode(self, ctx, *, args):
-        i = args.encode('ascii')
-        b = base64.b64encode(i)
-        b64 = b.decode('ascii')
-        await ctx.send(b64)
-
-    @commands.command()
-    @commands.guild_only()
-    async def decode(self, ctx, *, args):
-        i = args.encode('ascii')
-        b = base64.b64decode(i)
-        b64 = b.decode('ascii')
-        await ctx.send(b64)
-
-    @commands.command()
-    @commands.guild_only()
-    async def textflip(self, ctx, *, msg):
-        result = ""
-        for char in msg:
-            if char in text_flip:
-                result += text_flip[char]
+            url = 'https://unsplash.com/search/photos/' + args.replace(" ", "%20")
+            page = requests.get(url)
+            soup = bs4(page.text, 'html.parser')
+            image_tags = soup.findAll('img')
+            if str(image_tags[2]['src']).find("https://trkn.us/pixel/imp/c="):
+                link = image_tags[2]['src']
+                try:
+                    async with aiohttp.ClientSession() as session:
+                        async with session.get(link) as resp:
+                            image = await resp.read()
+                    with io.BytesIO(image) as file:
+                        await ctx.send(f"Search result for: **{args}**", file=discord.File(file, f"{ctx.message.id}.png"))
+                except:
+                    await ctx.send(f'' + link + f"\nSearch result for: **{args}** ")
             else:
-                result += char
-        await ctx.send(result[::-1])
+                await ctx.send("Nothing found for **" + args + "**")
 
     @commands.command()
     @commands.guild_only()
-    async def spacetext(self, ctx, *, msg):
-        if msg.split(' ', 1)[0].isdigit():
-            spaces = int(msg.split(' ', 1)[0]) * ' '
-            msg = msg.split(' ', 1)[1].strip()
+    async def encode(self, ctx, *, args = None):
+        if args == None:
+            return await ctx.send(f"You need to provide something to encode.\nUsage: `{prefix(ctx.message)}encode [text]`")
         else:
-            spaces = '  '
-        spaced_message = spaces.join(list(msg))
-        await ctx.send(spaced_message)
+            i = args.encode('ascii')
+            b = base64.b64encode(i)
+            b64 = b.decode('ascii')
+            await ctx.send(b64)
 
     @commands.command()
     @commands.guild_only()
-    async def ascii(self, ctx, *, args):
-        ascii_ = pyfiglet.figlet_format(args)
-        await ctx.send(f"```{ascii_}```")
+    async def decode(self, ctx, *, args = None):
+        if args == None:
+            return await ctx.send(f"You need to provide something to decode.\nUsage: `{prefix(ctx.message)}decode [text]`")
+        else:
+            i = args.encode('ascii')
+            b = base64.b64decode(i)
+            b64 = b.decode('ascii')
+            await ctx.send(b64)
+
+    @commands.command()
+    @commands.guild_only()
+    async def textflip(self, ctx, *, msg = None):
+        if msg == None:
+            return await ctx.send(f"You need to provide something to flip.\nUsage: `{prefix(ctx.message)}textflip [text]`")
+        else:
+            result = ""
+            for char in msg:
+                if char in text_flip:
+                    result += text_flip[char]
+                else:
+                    result += char
+            await ctx.send(result[::-1])
+
+    @commands.command()
+    @commands.guild_only()
+    async def spacetext(self, ctx, *, msg = None):
+        if msg == None:
+            return await ctx.send(f"You need to provide something to space.\nUsage: `{prefix(ctx.message)}spacetext [text]`")
+        else:
+            if msg.split(' ', 1)[0].isdigit():
+                spaces = int(msg.split(' ', 1)[0]) * ' '
+                msg = msg.split(' ', 1)[1].strip()
+            else:
+                spaces = '  '
+            spaced_message = spaces.join(list(msg))
+            await ctx.send(spaced_message)
+
+    @commands.command()
+    @commands.guild_only()
+    async def ascii(self, ctx, *, args = None):
+        if args == None:
+            return await ctx.send(f"You need to provide something to transform.\nUsage: `{prefix(ctx.message)}ascii [text]`")
+        else:
+            ascii_ = pyfiglet.figlet_format(args)
+            await ctx.send(f"```{ascii_}```")
 
     @commands.command(pass_context=True, aliases=['regional'])
     @commands.guild_only()
-    async def bigtext(self, ctx, *, msg):
-        msg = list(msg)
-        regional_list = [regionals[x.lower()] if x.isalnum() or x in ["!", "?"] else x for x in msg]
-        regional_output = ' '.join(regional_list) #\u200b alternative for space
-        await ctx.send(regional_output)
+    async def bigtext(self, ctx, *, msg = None):
+        if msg == None:
+            return await ctx.send(f"You need to provide something to transform.\nUsage: `{prefix(ctx.message)}bigtext [text]`")
+        else:
+            msg = list(msg)
+            regional_list = [regionals[x.lower()] if x.isalnum() or x in ["!", "?"] else x for x in msg]
+            regional_output = ' '.join(regional_list) #\u200b alternative for space
+            await ctx.send(regional_output)
 
     @commands.command(aliases=['findiq'])
     @commands.guild_only()
@@ -217,77 +255,145 @@ class FunCommands(commands.Cog):
             message='Wow. He could be the next Albert Einstein'
         else:
             message=''
+        message = message
         await ctx.send(f"**{member.name}** has {iq} IQ.")
+        
+    @iq.error
+    async def iq_err(self, ctx, error):
+        if isinstance(error, commands.BadArgument):
+            await ctx.send("User not found.")
 
     @commands.command()
     @commands.guild_only()
-    async def hack(self, ctx, user: discord.Member):
-        msg = await ctx.send(f'⌛ Hacking started for user {user.name}.')
-        await asyncio.sleep(2)
-        await msg.edit(content='⏳ Getting user\'s email...')
-        await asyncio.sleep(2)
-        await msg.edit(content='⌛ Fetching login (token found)...')
-        await asyncio.sleep(2)
-        await msg.edit(content='⏳ Fetching user\'s DMs...')
-        await asyncio.sleep(2)
-        await msg.edit(content='⌛ Tracing user\'s IP from messages...')
-        await asyncio.sleep(2)
-        await msg.edit(content='⏳ Last DM: `stop pinging`')
-        await asyncio.sleep(2)
-        await msg.edit(content='⌛ Finding most used feature in discord...')
-        await asyncio.sleep(2)
-        await msg.edit(content='⏳ Most used feature: `Selfbots`')
-        await asyncio.sleep(2)
-        await msg.edit(content='⌛ Injecting threats `Trojan:Win32/Ymacco.AA53`, `Trojan:Win32/Wacatac.D5!ml` and `HackTool:Win32/Keygen`...')
-        await asyncio.sleep(2)
-        await msg.edit(content='⏳ Injected `Trojan:Win32/Wacatac.D5!ml`... (Status: `High`)')
-        await asyncio.sleep(2)
-        await msg.edit(content='⌛ Injected `Trojan:Win32/Ymacco.AA53`... (Status: `Severe`)')
-        await asyncio.sleep(2)
-        await msg.edit(content='⏳ Injected `HackTool:Win32/KeyGen`... (Status: `Very High`)')
-        await asyncio.sleep(2)
-        await msg.edit(content='⌛ Found AppData information... Nitro Stolen...')
-        await asyncio.sleep(2)
-        await msg.edit(content='⏳ Selling data to goverment')
-        await asyncio.sleep(2)
-        await msg.edit(content=f'⌛ Getting house info with discriminator of #{user.discriminator}')
-        await asyncio.sleep(2)
-        await msg.edit(content=f'⌛ Email: **{user.name}h@gmail.com**\nPassword: **\\*\\*\\*\\*\\*\\*\\***')
-        await asyncio.sleep(1)
-        await msg.edit(content=f'✅ User has been hacked! Login info saved in DMs.')
+    async def hack(self, ctx, user: discord.Member = None):
+        if user == None:
+            return await ctx.send(f"You need to provide something to hack.\nUsage: `{prefix(ctx.message)}hack [user]`")
+        else:
+            msg = await ctx.send(f'⌛ Hacking started for user {user.name}.')
+            await asyncio.sleep(2)
+            await msg.edit(content='⏳ Getting user\'s email...')
+            await asyncio.sleep(2)
+            await msg.edit(content='⌛ Fetching login (token found)...')
+            await asyncio.sleep(2)
+            await msg.edit(content='⏳ Fetching user\'s DMs...')
+            await asyncio.sleep(2)
+            await msg.edit(content='⌛ Tracing user\'s IP from messages...')
+            await asyncio.sleep(2)
+            await msg.edit(content='⏳ Last DM: `stop pinging`')
+            await asyncio.sleep(2)
+            await msg.edit(content='⌛ Finding most used feature in discord...')
+            await asyncio.sleep(2)
+            await msg.edit(content='⏳ Most used feature: `Selfbots`')
+            await asyncio.sleep(2)
+            await msg.edit(content='⌛ Injecting threats `Trojan:Win32/Ymacco.AA53`, `Trojan:Win32/Wacatac.D5!ml` and `HackTool:Win32/Keygen`...')
+            await asyncio.sleep(2)
+            await msg.edit(content='⏳ Injected `Trojan:Win32/Wacatac.D5!ml`... (Status: `High`)')
+            await asyncio.sleep(2)
+            await msg.edit(content='⌛ Injected `Trojan:Win32/Ymacco.AA53`... (Status: `Severe`)')
+            await asyncio.sleep(2)
+            await msg.edit(content='⏳ Injected `HackTool:Win32/KeyGen`... (Status: `Very High`)')
+            await asyncio.sleep(2)
+            await msg.edit(content='⌛ Found AppData information... Nitro Stolen...')
+            await asyncio.sleep(2)
+            await msg.edit(content='⏳ Selling data to goverment')
+            await asyncio.sleep(2)
+            await msg.edit(content=f'⌛ Getting house info with discriminator of #{user.discriminator}')
+            await asyncio.sleep(2)
+            await msg.edit(content=f'⌛ Email: **{user.name}h@gmail.com**\nPassword: **\\*\\*\\*\\*\\*\\*\\***')
+            await asyncio.sleep(1)
+            await msg.edit(content=f'✅ User has been hacked! Login info saved in DMs.')
+
+    @hack.error
+    async def hack_err(self, ctx, error):
+        if isinstance(error, commands.BadArgument):
+            await ctx.send("User not found.")
 
     @commands.command(aliases=['claptalk'])
     @commands.guild_only()
-    async def clap(self, ctx, *, message):
-        await ctx.send(' 👏 '.join(message.split(' ')))
+    async def clap(self, ctx, *, message = None):
+        if message == None:
+            return await ctx.send(f"You need to provide something to be clapped.\nUsage: `{prefix(ctx.message)}clap [text]`")
+        else:
+            await ctx.send(' 👏 '.join(message.split(' ')))
 
     @commands.command(name='1337', aliases=['leetspeak','1337speak'])
     @commands.guild_only()
-    async def _1337_speak(self, ctx, *, text):
-        text = text.replace('a', '4').replace('A', '4').replace('e', '3') \
-            .replace('E', '3').replace('i', '!').replace('I', '!') \
-            .replace('o', '0').replace('O', '0')
-        await ctx.send(f'{text}')
+    async def _1337_speak(self, ctx, *, text = None):
+        if text == None:
+            return await ctx.send(f"You need to provide something to transform.\nUsage: `{prefix(ctx.message)}1337 [text]`")
+        else:
+            text = text.replace('a', '4').replace('A', '4').replace('e', '3') \
+                .replace('E', '3').replace('i', '!').replace('I', '!') \
+                .replace('o', '0').replace('O', '0')
+            await ctx.send(f'{text}')
 
     @commands.command()
     @commands.guild_only()
-    async def embed(self, ctx, *, args):
-        argsplit = args.split("|")
-        if "|" in ctx.message.content:
-            title = argsplit[0]
-            desc = argsplit[1]
-            embed = discord.Embed(
-                title=title,  description=desc, colour=emcolor)
+    async def embed(self, ctx, *, args = None):
+        if args == None:
+            return await ctx.send(f"You need to provide something to transform.\nUsage: `{prefix(ctx.message)}embed [query]`")
         else:
-            title=args
-            embed = discord.Embed(title=title, colour=emcolor)
-        footera(embed)
-        await ctx.send(embed=embed)
+            argsplit = args.split("|")
+            if "|" in ctx.message.content:
+                title = argsplit[0]
+                desc = argsplit[1]
+                embed = discord.Embed(
+                    title=title,  description=desc, colour=emcolor)
+            else:
+                title=args
+                embed = discord.Embed(title=title, colour=emcolor)
+            footera(embed)
+            await ctx.send(embed=embed)
 
     @commands.command()
-    async def findip(self, ctx, member: discord.Member):
-        nums = '1234567890'
-        await ctx.send(f'{member.mention}\'s IP is `18'+random.choice(nums)+f'.{random.randint(2, 7)}'+''.join(random.choice(nums) for i in range(random.randint(1, 2)))+'.'+''.join(random.choice(nums) for i in range(random.randint(2, 3)))+'.'+''.join(random.choice(nums) for i in range(3))+'`')
+    @commands.guild_only()
+    async def findip(self, ctx, *, member: discord.Member = None):
+        if member == None:
+            return await ctx.send(f"You need to provide something to hack their IP.\nUsage: `{prefix(ctx.message)}findip [user]`")
+        else:
+            nums = '1234567890'
+            await ctx.send(f'{member.mention}\'s IP is `18'+random.choice(nums)+f'.{random.randint(2, 7)}'+''.join(random.choice(nums) for i in range(random.randint(1, 2)))+'.'+''.join(random.choice(nums) for i in range(random.randint(2, 3)))+'.'+''.join(random.choice(nums) for i in range(3))+'`')
+
+    @findip.error
+    async def findip_err(self, ctx, error):
+        if isinstance(error, commands.BadArgument):
+            await ctx.send("User not found.")
+
+    @commands.command()
+    @commands.guild_only()
+    async def fakenitro(self, ctx, *, link = None):
+        await ctx.message.delete()
+        if link == 'rickroll':
+            link = 'https://www.youtube.com/watch?v=oHg5SJYRHA0'
+        elif link == None:
+            link = 'https://cdn.discordapp.com/attachments/781697496090280029/790889469980704778/tenor.gif'
+        else:
+            if not link.startswith("http"):
+                link = "http://"+link
+        length = 15
+        letters = 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789'
+        code = ''.join(random.choice(letters) for i in range(length))
+        t = random.choice(['Classic', 'Nitro Boost'])
+        if t == 'Classic':
+            e = Embed(
+                title='Successfully Generated Nitro',
+                description=f'Successfully generated nitro code...\n**Code Type:** Nitro Classic\n**Gift Link:** [https://discord.gift/{code}]({link})',
+                color=0x5d82e6,
+                timestamp=timei.now
+            )
+            e.set_footer(text="Discord Administrative Tool")
+            e.set_thumbnail(url="https://cdn.discordapp.com/attachments/781697496090280029/790882014600364032/220.png")
+            await ctx.send(embed=e)
+        if t == 'Nitro Boost':
+            e = Embed(
+                title='Successfully Generated Nitro',
+                description=f'Successfully generated nitro code...\n**Code Type:** Nitro Boost\n**Gift Link:** [https://discord.gift/{code}]({link})',
+                color=0xf47fff,
+                timestamp=timei.now
+            )
+            e.set_footer(text="Discord Administrative Tool")
+            e.set_thumbnail(url="https://cdn.discordapp.com/attachments/781697496090280029/790880997167464468/EWdeUeHXkAQgJh7.png")
+            await ctx.send(embed=e)
 
     @commands.command(aliases=['coinflip','flipcoin'])
     @commands.guild_only()

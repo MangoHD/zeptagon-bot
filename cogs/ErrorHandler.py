@@ -27,16 +27,7 @@ class ErrorHandler(commands.Cog):
                 colour=emcolor
             )
             footerd(embed)
-            await ctx.send('```MissingRequiredArgument: Atleast one required argument is missing.```')
-
-        if isinstance(error, commands.BadArgument):
-            embed=discord.Embed(
-                title='Error',
-                description=f'`{error}`',
-                colour=emcolor
-            )
-            footerd(embed)
-            await ctx.send(f'```BadArgument: Atleast one invalid argument was given```')
+            await ctx.send('**Missing Arguments:** Atleast one required argument is missing.')
 
         if isinstance(error, discord.ext.commands.MissingPermissions):
             embed=discord.Embed(
@@ -45,7 +36,7 @@ class ErrorHandler(commands.Cog):
                 colour=emcolor
             )
             footerd(embed)
-            await ctx.send(f'```{error}```')
+            await ctx.send(f'{error}')
 
 def setup(bot):
     bot.add_cog(ErrorHandler(bot))

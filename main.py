@@ -98,18 +98,27 @@ async def on_ready():
 
 async def presence():
     await zept.wait_until_ready()
-
+    # m = 0
+    # for guild in zept.guilds:
+    #     g_m = []
+    #     async for mem in guild.fetch_members(limit=None):
+    #         g_m.append(mem.name)
+    #     m = m + len(g_m)
+    # global thisthing
+    # thisthing = str(m)
     while not zept.is_closed():
         await zept.change_presence(status=discord.Status.online, activity=discord.Activity(type=discord.ActivityType.listening, name=f"{actualprefix}help | Zept"))
         await asyncio.sleep(7)
         await zept.change_presence(status=discord.Status.online, activity=discord.Activity(type=discord.ActivityType.watching, name=f"{len(zept.guilds)} servers | Zept"))
         await asyncio.sleep(3)
+        # await zept.change_presence(status=discord.Status.online, activity=discord.Activity(type=discord.ActivityType.watching, name=f"{thisthing} servers | Zept"))
+        # await asyncio.sleep(3)
         await zept.change_presence(status=discord.Status.online, activity=discord.Game(name=f'{motd} | Zept'))
         await asyncio.sleep(3)
 
 zept.loop.create_task(presence())
 
-exts = ['ErrorHandler', 'Moderation', 'Giveaway', 'Snipe', 'Math', 'Configuration', 'Help', 'Miscellaneous', 'Fun', 'Image', 'Utils']
+exts = ['ErrorHandler', 'Moderation', 'Giveaway', 'Snipe', 'Math', 'Configuration', 'Help', 'Miscellaneous', 'Fun', 'Image', 'Utils', 'JoinEvents']
 
 if __name__ == "__main__":
     for cog in exts:

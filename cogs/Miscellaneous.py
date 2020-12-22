@@ -144,31 +144,35 @@ class Miscellaneous(commands.Cog):
         footerd(e)
         await ctx.send(embed=e)
 
+    @userinfo.error
+    async def whois_err(self, ctx, error):
+        if isinstance(error, commands.BadArgument):
+            await ctx.send("User not found.")
+
     @commands.command(aliases=['message', 'msgs', 'messagecount', 'msgcount'])
     @commands.guild_only()
     async def messages(self, ctx, user: discord.Member = 'self'):
         if user == 'self':
             user = ctx.author
-
         thing = 0
-
         try:
-            for channel in ctx.guild.channels:
-                if channel.type == discord.ChannelType.text:
-                    async for thing2 in channel.history(limit=26000):
-                        if thing2.author == user:
-                            thing = thing + 1
-                else:
-                    pass
+            for channel in ctx.guild.text_channels:
+                async for thing2 in channel.history(limit=None):
+                    if thing2.author == user:
+                        thing = thing + 1
         except Exception as er:
             print(er)
 
         e = discord.Embed(
             description=f'{user.mention} has `{len(thing)}` total messages.\nNote: The counter only counts the last 25000 messages.',
-            color=emcolor
-        )
+            color=emcolor)
         footera(e)
         await ctx.send(embed=e)
+
+    @messages.error
+    async def msgs_err(self, ctx, error):
+        if isinstance(error, commands.BadArgument):
+            await ctx.send("User not found.")
 
     @commands.command(aliases=['invs'])
     @commands.guild_only()
@@ -194,6 +198,11 @@ class Miscellaneous(commands.Cog):
         footera(e)
         await ctx.send(embed=e)
 
+    @invites.error
+    async def invs_err(self, ctx, error):
+        if isinstance(error, commands.BadArgument):
+            await ctx.send("User not found.")
+
     @commands.command(aliases=['av'])
     @commands.guild_only()
     async def avatar(self, ctx, user: discord.Member = None):
@@ -207,6 +216,11 @@ class Miscellaneous(commands.Cog):
         e.set_image(url=user.avatar_url)
         footera(e)
         await ctx.send(embed=e)
+
+    @avatar.error
+    async def av_err(self, ctx, error):
+        if isinstance(error, commands.BadArgument):
+            await ctx.send("User not found.")
 
     @commands.command(aliases=['fetchav', 'fetch_av', 'fetch_avatar'])
     @commands.guild_only()
@@ -225,11 +239,16 @@ class Miscellaneous(commands.Cog):
         footera(e)
         await ctx.send(embed=e)
 
+    @fetchavatar.error
+    async def fetchav_err(self, ctx, error):
+        if isinstance(error, commands.BadArgument):
+            await ctx.send("User not found.")
+
     @commands.command(aliases=['fetch_user', 'fetchuser', 'fetchuserinfo'])
     @commands.guild_only()
     async def fetch_userinfo(self, ctx, id_: int = None):
         if id_ == None:
-            return await ctx.send(f"You need to provide someone to fetch their avatar.\nUsage: `{prefix(ctx.message)}fetchav [user-id]`")
+            return await ctx.send(f"You need to provide someone to fetch their profile.\nUsage: `{prefix(ctx.message)}fetchuser [user-id]`")
         user = await self.bot.fetch_user(id_)
         e = discord.Embed(
             title='User Info',
@@ -248,6 +267,11 @@ class Miscellaneous(commands.Cog):
         footerd(e)
 
         await ctx.send(embed=e)
+
+    @fetch_userinfo.error
+    async def fetchuser_err(self, ctx, error):
+        if isinstance(error, commands.BadArgument):
+            await ctx.send("User not found.")
 
 def setup(bot):
     bot.add_cog(Miscellaneous(bot))

@@ -19,13 +19,17 @@ class Utilities(commands.Cog):
     @commands.command()
     @commands.guild_only()
     async def pingweb(self, ctx, website = None):
+        if website.startswith('http'):
+            pass
+        else:
+            website = "http://"+website
         if website is None:
             pass
         else:
             try:
                 r = requests.get(website).status_code
             except Exception as _e:
-                await ctx.send("```Error: {}```".format(_e))
+                await ctx.send("**Error:** {}".format(_e))
             if r == 404:
                 await ctx.send(f'Site is down, responded with a status code of `{r}`.')
             else:
@@ -37,7 +41,7 @@ class Utilities(commands.Cog):
         embed = discord.Embed(
             title='Invite Zeptagon',
             description="[All Perms Invite](https://discord.com/oauth2/authorize?client_id=785496485659148359&permissions=8&scope=bot)\n"
-                "[Recommended Invite](https://discord.com/oauth2/authorize?client_id=785496485659148359&scope=bot&permissions=2113400023&response_type=code)\n"
+                "[Recommended Invite](https://discord.com/oauth2/authorize?client_id=785496485659148359&scope=bot&permissions=2113400023)\n"
                 "[Community Discord](https://discord.gg/TgKBwvszAB)"
                 "\n\nDeveloped by [mutefx#0001](http://bit.ly/sub2mango)",
             colour=emcolor)
