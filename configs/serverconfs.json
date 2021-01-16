@@ -1,0 +1,19 @@
+{
+    "747523303907786954": {
+        "prefix": ".",
+        "muterole": 787354347909939240,
+        "events": {
+            "autorole": null,
+            "joinMsg": {
+                "enabled": false,
+                "channel": 747523304365228133,
+                "message": "Welcome {user}, to **{server}**!"
+            },
+            "leaveMsg": {
+                "enabled": false,
+                "channel": 747523304365228133,
+                "message": "**{user}** just left the server."
+            }
+        }
+    }
+}

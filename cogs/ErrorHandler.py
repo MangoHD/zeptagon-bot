@@ -10,33 +10,18 @@ class ErrorHandler(commands.Cog):
 
     @commands.Cog.listener()
     async def on_command_error(self, ctx, error):
-        # if isinstance(error, discord.ext.commands.errors.CommandNotFound):
-        #     await ctx.message.delete()
-        #     embed=discord.Embed(
-        #         title='Error',
-        #         description=f'`{error}`\n`{prefix}help` for a list of commands.',
-        #         colour=emcolor
-        #     )
-        #     footerd(embed)
-        #     await ctx.send(f"```{error}\nUse {prefix}help for info about commands.```", delete_after=35)
+        GuildOnly = (isinstance(error, commands.NoPrivateMessage))
+        MissingArgs = (isinstance(error, commands.MissingRequiredArgument))
+        MissingPerms = (isinstance(error, discord.ext.commands.MissingPermissions))
 
-        if isinstance(error, commands.MissingRequiredArgument):
-            embed=discord.Embed(
-                title='Error',
-                description=f'`{error}`',
-                colour=emcolor
-            )
-            footerd(embed)
-            await ctx.send('**Missing Arguments:** Atleast one required argument is missing.')
+        if GuildOnly:
+            return await ctx.send("Error: commands cannot be used in Direct Messages.".format(cmd=ctx.message.content.split(' ')[0]))
 
-        if isinstance(error, discord.ext.commands.MissingPermissions):
-            embed=discord.Embed(
-                title='Error',
-                description=f'`{error}`',
-                colour=emcolor
-            )
-            footerd(embed)
-            await ctx.send(f'{error}')
+        elif MissingArgs:
+            return await ctx.send('**Missing Arguments:** Atleast one required argument is missing.')
+
+        elif MissingPerms:
+            return await ctx.send(f'{error}')
 
 def setup(bot):
     bot.add_cog(ErrorHandler(bot))

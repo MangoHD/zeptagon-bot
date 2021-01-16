@@ -18,12 +18,11 @@ class ImageCommands(commands.Cog):
     @commands.command()
     @commands.guild_only()
     async def gay(self, ctx, *, args: discord.Member = 'None'):
+        await ctx.trigger_typing()
         if args == 'None':
             args = ctx.author
-        avatar = args.avatar_url
-        #Image.open(BytesIO(await f"https://some-random-api.ml/canvas/gay?avatar={avatar}".read())).save(f'{ctx.message.id}.png')
+        avatar = args.avatar_url_as(format='jpg', size=256)
         embed=discord.Embed(
-            #title=f'gay overlay',
             color=emcolor,
             timestamp=timei.now)
         embed.set_image(url=f"https://some-random-api.ml/canvas/gay?avatar={avatar}")
@@ -33,6 +32,7 @@ class ImageCommands(commands.Cog):
     @commands.command(aliases=['twitter'])
     @commands.guild_only()
     async def tweet(self, ctx, *, message: str):
+        await ctx.trigger_typing()
         a = message.split(' ')
         msg = '+'.join(a)
         e = ctx.author.name.split(' ')
@@ -64,6 +64,7 @@ class ImageCommands(commands.Cog):
     @commands.command(aliases=['ytcomment'])
     @commands.guild_only()
     async def youtubecomment(self, ctx, *, args):
+        await ctx.trigger_typing()
         a = args.split(' ')
         b = '+'.join(a)
         c = ctx.author.avatar_url_as(format='jpg')
@@ -89,7 +90,7 @@ class ImageCommands(commands.Cog):
             color=emcolor
         )
         footera(e)
-        e.set_image(url=f"https://some-random-api.ml/canvas/triggered?avatar={args.avatar_url_as(format='jpg')}")
+        e.set_image(url=f"https://some-random-api.ml/canvas/triggered?avatar={args.avatar_url_as(format='jpg', size=256)}")
         await ctx.send(embed=e)
         # with open(f'./{ctx.message.id}.gif', 'wb') as i:
         #     i.write(requests.get(f"https://some-random-api.ml/canvas/triggered?avatar={args.avatar_url_as(format='jpg')}").content)
@@ -100,68 +101,48 @@ class ImageCommands(commands.Cog):
     @commands.command(aliases=['redditmeme', 'memes'])
     @commands.guild_only()
     async def meme(self, ctx):
-        """Gets a random meme from the r/memes sub-reddit and posts it"""
         await ctx.trigger_typing()
-        data = await self.get_res_data(f"r/memes/random", {'limit': 1})
+        data = await self.get_res_data(f"r/memes/random", {'limit': 10})
         await self.send_post(ctx, data[0]['data']['children'][0])
-
     async def random_from_post_list(self, ctx, url_part: str, params: dict):
         await ctx.trigger_typing()
         res = await self.get_res_data(url_part, params)
-
-        # Send the error and return
         error = res.get('error')
         if error:
-            await ctx.send(f"What if you wanted to see a post, but Reddit said:\n{error} {res.get('message')}")
-            return
-
-        # Get the raw list of posts
+            return await ctx.send(f"Error: {error} {res.get('message')}")
         posts = res['data']['children']
-
-        # Filter the posts
         posts = list(filter(self.post_safe_filter, posts))
-
-        # If no posts went through the filter, then reply and return
         if not posts:
-            await ctx.send("Couldn't find any posts :(")
-            return
-
-        # Grab a random post
-        post = random.choice(posts)
-
+            return await ctx.send("No posts found.")
+        if int(res['data']['ups']) < 7000:
+            post = random.choice(posts)
         await self.send_post(ctx, post)
-
     async def get_res_data(self, url_part, params):
         async with self.session.get(f"https://reddit.com/{url_part}.json", params=params) as response:
             return await response.json()
-
     async def send_post(self, ctx, post):
         post = post['data']
-
-        # Extract info to be used
         img_url = post.get('url')
         title = post.get('title')
         ups = post.get('ups')
         num_comments = post.get('num_comments')
-
         embed = Embed(title=title, color=emcolor, timestamp=timei.now)
         embed.set_image(url=img_url)
         # TODO: Use unicode instead of emojis directly
         embed.set_footer(text=f"👍 {ups} | 💬 {num_comments}")
         await ctx.send(embed=embed)
-
     def post_safe_filter(self, post):
         return(
             post['data']['is_reddit_media_domain'] and
-            not post['data']['over_18']
-        )
-
+            not post['data']['over_18'] and
+            int(post['data']['ups']) > 7000)
     async def close_session(self):
         await self.session.close()
 
     @commands.command()
     @commands.guild_only()
     async def cat(self, ctx):
+        await ctx.trigger_typing()
         r = requests.get('https://some-random-api.ml/img/cat')
         data = r.json()
         img = data.get('link')
@@ -175,6 +156,7 @@ class ImageCommands(commands.Cog):
     @commands.command()
     @commands.guild_only()
     async def dog(self, ctx):
+        await ctx.trigger_typing()
         r = requests.get('https://some-random-api.ml/img/dog')
         data = r.json()
         img = data.get('link')
@@ -188,6 +170,7 @@ class ImageCommands(commands.Cog):
     @commands.command()
     @commands.guild_only()
     async def koala(self, ctx):
+        await ctx.trigger_typing()
         r = requests.get('https://some-random-api.ml/img/koala')
         data = r.json()
         img = data.get('link')
@@ -201,6 +184,7 @@ class ImageCommands(commands.Cog):
     @commands.command()
     @commands.guild_only()
     async def bird(self, ctx):
+        await ctx.trigger_typing()
         r = requests.get('https://some-random-api.ml/img/birb')
         data = r.json()
         img = data.get('link')
@@ -214,6 +198,7 @@ class ImageCommands(commands.Cog):
     @commands.command()
     @commands.guild_only()
     async def panda(self, ctx):
+        await ctx.trigger_typing()
         r = requests.get('https://some-random-api.ml/img/panda')
         data = r.json()
         img = data.get('link')
@@ -227,6 +212,7 @@ class ImageCommands(commands.Cog):
     @commands.command()
     @commands.guild_only()
     async def fox(self, ctx):
+        await ctx.trigger_typing()
         r = requests.get('https://some-random-api.ml/img/fox')
         data = r.json()
         img = data.get('link')
